@@ -1,10 +1,17 @@
 {
   "expo": {
-    "name": "AtlasDeviceSdkApp",
-    "slug": "AtlasDeviceSdkApp",
+    "name": "Elo App",
+    "slug": "EloApp1348273",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ]
+    "plugins": ["expo-image-picker"],
+    "assetBundlePatterns": ["**/*"],
+    "android": {
+      "package": "com.anonymous.AtlasDeviceSdkApp"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "9ef6cd75-5606-46ce-be9e-f394720ff7db"
+      }
+    }
   }
 }

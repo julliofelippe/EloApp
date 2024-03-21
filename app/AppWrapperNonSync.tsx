@@ -1,26 +1,18 @@
-import React from 'react';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import { SafeAreaView } from 'react-native';
 
-import colors from './styles/colors';
-import {AppNonSync} from './AppNonSync';
+import AppNonSync from './AppNonSync';
 
-import {RealmProvider} from '@realm/react';
-import {schemas} from './models';
+import { RealmProvider } from '@realm/react';
+import { schemas } from './models';
+import { NativeBaseProvider } from 'native-base';
 
 export const AppWrapperNonSync = () => {
   // If sync is disabled, setup the app without any sync functionality and return early
   return (
-    <SafeAreaView style={styles.screen}>
+    <NativeBaseProvider>
       <RealmProvider schema={schemas}>
         <AppNonSync />
       </RealmProvider>
-    </SafeAreaView>
+    </NativeBaseProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: colors.darkBlue,
-  },
-});

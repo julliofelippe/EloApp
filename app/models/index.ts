@@ -1,3 +1,3 @@
-import {Task} from './Task';
+import { LashingFormSchema } from './lashingFormSchema';
 
-export const schemas = [Task];
+export const schemas = [LashingFormSchema];
