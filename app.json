@@ -3,7 +3,7 @@
     "name": "Elo App",
     "slug": "EloApp1348273",
     "version": "1.0.0",
-    "plugins": ["expo-image-picker"],
+    "plugins": ["expo-image-picker", "expo-build-properties"],
     "assetBundlePatterns": ["**/*"],
     "android": {
       "package": "com.anonymous.AtlasDeviceSdkApp"
