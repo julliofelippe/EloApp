@@ -33,7 +33,11 @@ const DrawerNav = () => {
               drawerIcon: ({ color, size, focused }) => (
                 <Feather name={item.icon} size={size} color={color} />
               ),
-              drawerLabel: item.label
+              drawerLabel: item.label,
+              title: item.title,
+              headerTitleStyle: {
+                color: '#e7781c'
+              }
             }}
           />
         );

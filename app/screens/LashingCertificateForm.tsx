@@ -30,6 +30,7 @@ import useGenerateForm from '../hooks/useGenerateForm';
 import { useObject, useRealm } from '@realm/react';
 import { useEffect } from 'react';
 import imagePlaceholder from '../../assets/image-placeholder.png';
+import ModalText from '../components/TextModal';
 
 type LashingCertificateFormProps = {
   clientName: string;
@@ -180,7 +181,7 @@ export default function LashingCertificateForm({ route }) {
   };
 
   function handleBack() {
-    navigation.goBack();
+    navigation.navigate('ataVistoria');
   }
 
   function getImageByIndex(index: number) {
@@ -213,7 +214,7 @@ export default function LashingCertificateForm({ route }) {
         handleBack();
       }
     } catch (error) {
-      Alert.alert('Chamado', 'Não foi possível cadastrar o formulário!');
+      Alert.alert('Erro', 'Preencha todos os campos do formulário!');
       console.log(error);
     }
   }
@@ -615,7 +616,7 @@ export default function LashingCertificateForm({ route }) {
             <Box key={field.id} alignItems="center" my={5}>
               <TouchableNativeFeedback>
                 <Box w="80%" h="200" alignItems="center" mb={5}>
-                  <Box
+                  {/* <Box
                     backgroundColor="orange.300"
                     p="7px"
                     borderRadius={20}
@@ -627,7 +628,7 @@ export default function LashingCertificateForm({ route }) {
                     }}
                   >
                     <Feather name="edit" size={24} color="black" />
-                  </Box>
+                  </Box> */}
                   <Image
                     source={{
                       uri: `data:image/jpeg;base64,${getImageByIndex(index)}`
@@ -644,38 +645,46 @@ export default function LashingCertificateForm({ route }) {
                   />
                 </Box>
               </TouchableNativeFeedback>
-              <Box>
-                <Text>Título da Imagem</Text>
-                <Controller
-                  key={field.id}
-                  control={control}
-                  name={`image.${index}.imageTitle`}
-                  render={({ field: { onChange } }) => (
-                    <Input
-                      placeholder="Barco NX 340"
-                      onChangeText={onChange}
-                      errorText={errors.cargoDate?.message}
-                      isDisabled={isViewing}
-                    />
-                  )}
-                ></Controller>
-              </Box>
+              <HStack>
+                <Box>
+                  <Text>Título da Imagem</Text>
+                  <Controller
+                    key={field.id}
+                    control={control}
+                    name={`image.${index}.imageTitle`}
+                    render={({ field: { onChange } }) => (
+                      <Input
+                        placeholder="Barco NX 340"
+                        onChangeText={onChange}
+                        errorText={errors.cargoDate?.message}
+                        isDisabled={isViewing}
+                        setWidth="320px"
+                      />
+                    )}
+                  ></Controller>
+                </Box>
+                <ModalText />
+              </HStack>
 
-              <Box>
-                <Text>Descrição da Imagem</Text>
-                <Controller
-                  control={control}
-                  name={`image.${index}.imageDescription`}
-                  render={({ field: { onChange } }) => (
-                    <Input
-                      placeholder="Descrição da Imagem"
-                      onChangeText={onChange}
-                      errorText={errors.cargoDate?.message}
-                      isDisabled={isViewing}
-                    />
-                  )}
-                ></Controller>
-              </Box>
+              <HStack>
+                <Box>
+                  <Text>Descrição da Imagem</Text>
+                  <Controller
+                    control={control}
+                    name={`image.${index}.imageDescription`}
+                    render={({ field: { onChange } }) => (
+                      <Input
+                        placeholder="Descrição da Imagem"
+                        onChangeText={onChange}
+                        errorText={errors.cargoDate?.message}
+                        isDisabled={isViewing}
+                        setWidth="320px"
+                      />
+                    )}
+                  ></Controller>
+                </Box>
+                <ModalText />
+              </HStack>
 
               <Box px={5}>
                 <Button

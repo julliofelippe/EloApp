@@ -20,18 +20,21 @@ export const ScreensArray = [
     route: 'home',
     label: 'Início',
     icon: 'home',
+    title: 'Dashboard',
     component: HomePage
   },
   {
     route: 'relatorioVistoria',
     label: 'Relatório de Vistoria',
     icon: 'file-text',
+    title: '',
     component: LashingCertificateForm
   },
   {
     route: 'ataVistoria',
     label: 'Ata de Vistoria',
     icon: 'file-text',
+    title: '',
     component: NewLashingFormPage
   }
 ];
