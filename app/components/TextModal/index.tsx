@@ -1,11 +1,21 @@
 import { Box, Button, Center, CheckIcon, Modal, Select } from 'native-base';
-import { useState, React } from 'react';
+import { useState } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { UseFormSetValue } from 'react-hook-form';
 
-export default function ModalText() {
+type ModalTextProps = {
+  onSelect: UseFormSetValue<any>;
+  fieldName: string;
+};
+
+export default function ModalText({ onSelect, fieldName }: ModalTextProps) {
   const [showModal, setShowModal] = useState(false);
   const [select, setSelect] = useState('');
+  const handleSelect = (itemValue) => {
+    setSelect(itemValue);
+    onSelect(fieldName, itemValue);
+  };
   return (
     <Center>
       <TouchableOpacity onPress={() => setShowModal(true)}>
@@ -39,7 +49,7 @@ export default function ModalText() {
                     endIcon: <CheckIcon size="5" />
                   }}
                   mt={1}
-                  onValueChange={(itemValue) => setSelect(itemValue)}
+                  onValueChange={(itemValue) => handleSelect(itemValue)}
                 >
                   <Select.Item label="UX Research" value="ux" />
                   <Select.Item label="Web Development" value="web" />

@@ -112,7 +112,7 @@ export default function LashingCertificateForm({ route }) {
     watch,
     reset
   } = useForm<LashingCertificateFormProps>({
-    // resolver: yupResolver(LashingCertificateFormSchema)
+    resolver: yupResolver(LashingCertificateFormSchema)
   });
 
   const { data, mode } = route.params;
@@ -126,8 +126,7 @@ export default function LashingCertificateForm({ route }) {
       });
       // console.log(getValues());
     }
-    if (data && mode === 'create') {
-      console.log('.');
+    if (mode === 'create') {
       reset();
     }
   }, [data]);
@@ -654,6 +653,7 @@ export default function LashingCertificateForm({ route }) {
                     name={`image.${index}.imageTitle`}
                     render={({ field: { onChange } }) => (
                       <Input
+                        value={getValues(`image.${index}.imageTitle`)}
                         placeholder="Barco NX 340"
                         onChangeText={onChange}
                         errorText={errors.cargoDate?.message}
@@ -663,7 +663,10 @@ export default function LashingCertificateForm({ route }) {
                     )}
                   ></Controller>
                 </Box>
-                <ModalText />
+                <ModalText
+                  onSelect={setValue}
+                  fieldName={`image.${index}.imageTitle`}
+                />
               </HStack>
 
               <HStack>
@@ -674,6 +677,7 @@ export default function LashingCertificateForm({ route }) {
                     name={`image.${index}.imageDescription`}
                     render={({ field: { onChange } }) => (
                       <Input
+                        value={getValues(`image.${index}.imageDescription`)}
                         placeholder="Descrição da Imagem"
                         onChangeText={onChange}
                         errorText={errors.cargoDate?.message}
@@ -683,7 +687,10 @@ export default function LashingCertificateForm({ route }) {
                     )}
                   ></Controller>
                 </Box>
-                <ModalText />
+                <ModalText
+                  onSelect={setValue}
+                  fieldName={`image.${index}.imageDescription`}
+                />
               </HStack>
 
               <Box px={5}>
