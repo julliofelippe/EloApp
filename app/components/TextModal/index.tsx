@@ -4,6 +4,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { UseFormSetValue } from 'react-hook-form';
 
+import { ModalImageDescription } from '../../data/ModalImageDescription';
+
 type ModalTextProps = {
   onSelect: UseFormSetValue<any>;
   fieldName: string;
@@ -35,15 +37,15 @@ export default function ModalText({ onSelect, fieldName }: ModalTextProps) {
       >
         <Modal.Content maxWidth="350" maxH="212">
           <Modal.CloseButton />
-          <Modal.Header>Nome do Cliente</Modal.Header>
+          <Modal.Header>Sugestões de Descrição</Modal.Header>
           <Modal.Body>
             <Center>
               <Box maxW="300">
                 <Select
                   selectedValue={select}
                   minWidth="200"
-                  accessibilityLabel="Choose Service"
-                  placeholder="Escolha o Nome"
+                  accessibilityLabel="Choose"
+                  placeholder="Selecione"
                   _selectedItem={{
                     bg: 'teal.600',
                     endIcon: <CheckIcon size="5" />
@@ -51,14 +53,15 @@ export default function ModalText({ onSelect, fieldName }: ModalTextProps) {
                   mt={1}
                   onValueChange={(itemValue) => handleSelect(itemValue)}
                 >
-                  <Select.Item label="UX Research" value="ux" />
-                  <Select.Item label="Web Development" value="web" />
-                  <Select.Item
-                    label="Cross Platform Development"
-                    value="cross"
-                  />
-                  <Select.Item label="UI Designing" value="ui" />
-                  <Select.Item label="Backend Development" value="backend" />
+                  {ModalImageDescription.map((item, index) => {
+                    return (
+                      <Select.Item
+                        label={item.label}
+                        value={item.value}
+                        key={index}
+                      />
+                    );
+                  })}
                 </Select>
               </Box>
             </Center>
@@ -66,7 +69,7 @@ export default function ModalText({ onSelect, fieldName }: ModalTextProps) {
           </Modal.Body>
           <Modal.Footer>
             <Button.Group space={2}>
-              <Button
+              {/* <Button
                 variant="ghost"
                 colorScheme="blueGray"
                 onPress={() => {
@@ -74,13 +77,13 @@ export default function ModalText({ onSelect, fieldName }: ModalTextProps) {
                 }}
               >
                 Cancelar
-              </Button>
+              </Button> */}
               <Button
                 onPress={() => {
                   setShowModal(false);
                 }}
               >
-                Salvar
+                Confirmar
               </Button>
             </Button.Group>
           </Modal.Footer>
