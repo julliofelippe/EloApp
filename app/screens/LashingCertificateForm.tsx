@@ -14,23 +14,16 @@ import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import {
-  Alert,
-  Pressable,
-  Plataform,
-  TouchableNativeFeedback
-} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { Feather } from '@expo/vector-icons';
+import { Alert, TouchableNativeFeedback } from 'react-native';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { LashingFormSchema } from '../models/lashingFormSchema';
 import useGenerateForm from '../hooks/useGenerateForm';
-import { useObject, useRealm } from '@realm/react';
+import { useRealm } from '@realm/react';
 import { useEffect } from 'react';
-import imagePlaceholder from '../../assets/image-placeholder.png';
 import ModalText from '../components/TextModal';
+import InputMasked from '../components/InputMasked';
 
 type LashingCertificateFormProps = {
   clientName: string;
@@ -105,7 +98,6 @@ export default function LashingCertificateForm({ route }) {
   const {
     control,
     handleSubmit,
-    register,
     formState: { errors },
     getValues,
     setValue,
@@ -124,7 +116,6 @@ export default function LashingCertificateForm({ route }) {
       Object.keys(data).forEach((key) => {
         setValue(key, data[key]);
       });
-      // console.log(getValues());
     }
     if (mode === 'create') {
       reset();
@@ -139,38 +130,8 @@ export default function LashingCertificateForm({ route }) {
     name: 'image'
   });
 
-  const [date, setDate] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
-  const [certificateDate, setCertificateDate] = useState('');
-  const toggleDatepicker = () => {
-    setShowPicker(!showPicker);
-  };
-  const onChange = ({ type }, selectedDate) => {
-    if (type == 'set') {
-      const currentDate = selectedDate;
-      setDate(currentDate);
-      if (Plataform.OS === 'android') {
-        toggleDatepicker();
-        setCertificateDate(currentDate.toDateString());
-      }
-    } else {
-      toggleDatepicker();
-    }
-  };
-
-  const requestPermission = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== 'granted') {
-      Alert.alert('Não foi possível acessar a câmera do dispositivo!');
-      return false;
-    }
-    return true;
-  };
-
   const navigation = useNavigation();
-
   const realm = useRealm();
-
   const values = getValues();
 
   const { generateForm } = useGenerateForm();
@@ -219,7 +180,6 @@ export default function LashingCertificateForm({ route }) {
   }
 
   const addNewImage = async () => {
-    // Permissão para acessar a galeria
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
@@ -293,13 +253,14 @@ export default function LashingCertificateForm({ route }) {
             control={control}
             name="date"
             render={({ field: { onChange, value } }) => (
-              <Input
+              <InputMasked
                 defaultValue={value}
                 placeholder="23/01/2014"
                 onChangeText={onChange}
                 errorText={errors.date?.message}
                 isDisabled={isViewing}
                 editable={true}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
