@@ -4,12 +4,6 @@ import Card from '../components/Card/Index';
 
 const dataCard = [
   {
-    formTitle: 'Certificado de Amarração',
-    buttonTitle: 'Novo Formulário',
-    icon: 'file-plus',
-    route: 'relatorioVistoria'
-  },
-  {
     formTitle: 'Certificado de Carro',
     buttonTitle: 'Novo Formulário',
     icon: 'file-plus',

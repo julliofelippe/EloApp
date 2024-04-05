@@ -15,7 +15,7 @@ export default function NewLashingFormPage({ navigation }) {
           formTitle="Certificado de Amarração"
           buttonTitle="Novo Formulário"
           icon="file-plus"
-          route="relatorioVistoria"
+          route="lashingCertificate"
         />
         <Divider my="2" backgroundColor="gray.500" />
         {tasks.map((item, index) => {

@@ -150,7 +150,7 @@ export default function LashingCertificateForm({ route }) {
 
   async function handleNewFormRegister() {
     try {
-      if (mode === 'edit') {
+      if (mode === 'edit' || mode === 'view') {
         const { ObjectId } = require('bson');
         const objectId = new ObjectId(data._id);
         let item = realm

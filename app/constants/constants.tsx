@@ -4,6 +4,8 @@ import FontAwesome from '@expo/vector-icons';
 import HomePage from '../screens/HomePage';
 import LashingCertificateForm from '../screens/LashingCertificateForm';
 import NewLashingFormPage from '../screens/NewLashingFormPage';
+import RelatorioVistoria from '../screens/RelatorioVistoria';
+import AtaVistoria from '../screens/AtaVistoria';
 import Forms from '../screens/Forms';
 import PawnCertificatePage from '../screens/PawnCertificatePage';
 
@@ -21,6 +23,7 @@ export const ScreensArray = [
     label: 'Início',
     icon: 'home',
     title: 'Dashboard',
+    display: '',
     component: HomePage
   },
   {
@@ -28,14 +31,40 @@ export const ScreensArray = [
     label: 'Relatório de Vistoria',
     icon: 'file-text',
     title: '',
-    component: LashingCertificateForm
+    display: '',
+    component: RelatorioVistoria
   },
   {
     route: 'ataVistoria',
     label: 'Ata de Vistoria',
     icon: 'file-text',
     title: '',
+    display: '',
+    component: AtaVistoria
+  },
+  {
+    route: 'newLashingCertificate',
+    label: 'Certificado de Lashing',
+    icon: 'file-text',
+    title: '',
+    display: 'none',
     component: NewLashingFormPage
+  },
+  {
+    route: 'lashingCertificate',
+    label: 'Certificado de Lashing',
+    icon: 'file-text',
+    title: '',
+    display: 'none',
+    component: LashingCertificateForm
+  },
+  {
+    route: 'pawnCertificate',
+    label: 'Certificado de Peação',
+    icon: 'file-text',
+    title: '',
+    display: 'none',
+    component: PawnCertificatePage
   }
 ];
 
@@ -46,8 +75,8 @@ export const drawerMenu = [
     icon: 'settings',
     route: 'Settings',
     menuList: [
-      { title: '• Lashing', routeTo: 'ataVistoria' },
-      { title: '• Carro', routeTo: 'relatorioVistoria' }
+      { title: '• Lashing', routeTo: 'newLashingCertificate' },
+      { title: '• Carro', routeTo: 'pawnCertificate' }
     ]
   }
 ];
