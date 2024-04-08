@@ -48,7 +48,7 @@ const CustomDrawer = (props: Props) => {
       {/* profile header */}
       <TouchableNativeFeedback onPress={() => navigation.navigate('Profile')}>
         <View style={styles.header}>
-          <Image source={profilePic} style={styles.avatar} />
+          {/* <Image source={profilePic} style={styles.avatar} /> */}
           <View style={styles.textContainer}>
             <Text style={styles.name}>Usuário</Text>
             <Text>Administrador</Text>
