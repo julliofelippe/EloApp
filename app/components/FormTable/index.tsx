@@ -1,9 +1,9 @@
-import { useCallback } from "react";
-import { HStack, Box, VStack, Text } from "native-base";
-import { Feather } from "@expo/vector-icons";
-import { TouchableNativeFeedback } from "react-native";
-import { useRealm } from "@realm/react";
-import useGenerateForm from "../../hooks/useGenerateForm";
+import { useCallback } from 'react';
+import { HStack, Box, VStack, Text } from 'native-base';
+import { Feather } from '@expo/vector-icons';
+import { TouchableNativeFeedback } from 'react-native';
+import { useRealm } from '@realm/react';
+import useGenerateForm from '../../hooks/useGenerateForm';
 
 export default function FormTable({ item, formName, navigation }) {
   const realm = useRealm();
@@ -24,16 +24,16 @@ export default function FormTable({ item, formName, navigation }) {
   console.log(item);
 
   const handleEdit = () => {
-    navigation.navigate("lashingCertificate", {
+    navigation.navigate('lashingCertificate', {
       data: item,
-      mode: "edit",
+      mode: 'edit'
     });
   };
 
   const handleView = () => {
-    navigation.navigate("lashingCertificate", {
+    navigation.navigate('lashingCertificate', {
       data: item,
-      mode: "view",
+      mode: 'view'
     });
   };
 
@@ -82,7 +82,7 @@ export default function FormTable({ item, formName, navigation }) {
             <Feather name="edit" size={22} />
           </Box>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={() => handleDeleteTask()}>
+        <TouchableNativeFeedback onPress={() => generateForm(item)}>
           <Box
             backgroundColor="orange.300"
             px={6}
@@ -93,7 +93,7 @@ export default function FormTable({ item, formName, navigation }) {
             <Feather name="download" size={22} />
           </Box>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={() => generateForm(item)}>
+        <TouchableNativeFeedback onPress={() => handleDeleteTask()}>
           <Box
             backgroundColor="orange.300"
             px={6}
