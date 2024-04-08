@@ -1,12 +1,14 @@
-import { useCallback } from 'react';
-import { HStack, Box, VStack, Text } from 'native-base';
-import { Feather } from '@expo/vector-icons';
-import { TouchableNativeFeedback } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useRealm } from '@realm/react';
+import { useCallback } from "react";
+import { HStack, Box, VStack, Text } from "native-base";
+import { Feather } from "@expo/vector-icons";
+import { TouchableNativeFeedback } from "react-native";
+import { useRealm } from "@realm/react";
+import useGenerateForm from "../../hooks/useGenerateForm";
 
 export default function FormTable({ item, formName, navigation }) {
   const realm = useRealm();
+  const { generateForm } = useGenerateForm();
+
   const handleDeleteTask = useCallback((): void => {
     try {
       realm.write(() => {
@@ -22,23 +24,22 @@ export default function FormTable({ item, formName, navigation }) {
   console.log(item);
 
   const handleEdit = () => {
-    navigation.navigate('lashingCertificate', {
+    navigation.navigate("lashingCertificate", {
       data: item,
-      mode: 'edit'
+      mode: "edit",
     });
   };
 
   const handleView = () => {
-    navigation.navigate('lashingCertificate', {
+    navigation.navigate("lashingCertificate", {
       data: item,
-      mode: 'view'
+      mode: "view",
     });
   };
 
   return (
     <Box
       border="1"
-      borderRadius="md"
       backgroundColor="gray.300"
       pb="15px"
       pt="10px"
@@ -81,7 +82,7 @@ export default function FormTable({ item, formName, navigation }) {
             <Feather name="edit" size={22} />
           </Box>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback>
+        <TouchableNativeFeedback onPress={() => handleDeleteTask()}>
           <Box
             backgroundColor="orange.300"
             px={6}
@@ -92,7 +93,7 @@ export default function FormTable({ item, formName, navigation }) {
             <Feather name="download" size={22} />
           </Box>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={() => handleDeleteTask()}>
+        <TouchableNativeFeedback onPress={() => generateForm(item)}>
           <Box
             backgroundColor="orange.300"
             px={6}

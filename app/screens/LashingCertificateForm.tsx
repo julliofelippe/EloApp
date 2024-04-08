@@ -5,25 +5,24 @@ import {
   ScrollView,
   Box,
   HStack,
-  Image
-} from 'native-base';
-import React, { useState } from 'react';
-import * as FileSystem from 'expo-file-system';
-import * as ImagePicker from 'expo-image-picker';
-import { useForm, Controller, useFieldArray } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import { Alert, TouchableNativeFeedback } from 'react-native';
+  Image,
+} from "native-base";
+import React, { useState } from "react";
+import * as FileSystem from "expo-file-system";
+import * as ImagePicker from "expo-image-picker";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useNavigation, useScrollToTop } from "@react-navigation/native";
+import { Alert, TouchableNativeFeedback } from "react-native";
 
-import Input from '../components/Input';
-import Button from '../components/Button';
-import { LashingFormSchema } from '../models/lashingFormSchema';
-import useGenerateForm from '../hooks/useGenerateForm';
-import { useRealm } from '@realm/react';
-import { useEffect } from 'react';
-import ModalText from '../components/TextModal';
-import InputMasked from '../components/InputMasked';
+import Input from "../components/Input";
+import Button from "../components/Button";
+import { LashingFormSchema } from "../models/lashingFormSchema";
+import { useRealm } from "@realm/react";
+import { useEffect } from "react";
+import ModalText from "../components/TextModal";
+import InputMasked from "../components/InputMasked";
 
 type LashingCertificateFormProps = {
   clientName: string;
@@ -54,44 +53,44 @@ type LashingCertificateFormProps = {
 };
 
 const LashingCertificateFormSchema = yup.object({
-  clientName: yup.string().required('Informe o nome do cliente'),
-  certificateNumber: yup.string().required('Informe o número do certificado'),
-  date: yup.string().required('Informe a data do certificado'),
-  containersNumber: yup.string().required('Informe o número do container'),
-  reservationNumber: yup.string().required('Informe o número da reserva'),
-  loadingPort: yup.string().required('Informe o porto de carregamento'),
-  destinationPort: yup.string().required('Informe o porto de destino'),
-  cargoNumber: yup.string().required('Informe o número do carregamento'),
+  clientName: yup.string().required("Informe o nome do cliente"),
+  certificateNumber: yup.string().required("Informe o número do certificado"),
+  date: yup.string().required("Informe a data do certificado"),
+  containersNumber: yup.string().required("Informe o número do container"),
+  reservationNumber: yup.string().required("Informe o número da reserva"),
+  loadingPort: yup.string().required("Informe o porto de carregamento"),
+  destinationPort: yup.string().required("Informe o porto de destino"),
+  cargoNumber: yup.string().required("Informe o número do carregamento"),
   cargoDescription: yup
     .string()
-    .required('Informe a descrição do carregamento'),
+    .required("Informe a descrição do carregamento"),
   cargoDimensions: yup
     .string()
-    .required('Informe as dimensões do carregamento'),
-  cargoWeight: yup.string().required('Informe o peso do carregamento'),
-  materialNumber: yup.string().required('Informe o número do material'),
-  materialDescription: yup.string().required('Informe a descrição do material'),
-  materialQuantity: yup.string().required('Informe a quantidade do material'),
+    .required("Informe as dimensões do carregamento"),
+  cargoWeight: yup.string().required("Informe o peso do carregamento"),
+  materialNumber: yup.string().required("Informe o número do material"),
+  materialDescription: yup.string().required("Informe a descrição do material"),
+  materialQuantity: yup.string().required("Informe a quantidade do material"),
   materialSWL: yup
     .string()
-    .required('Informe a Carga de trabalho segura do material'),
-  cintasQuantity: yup.string().required('Informe a quantidade de cintas/nine'),
+    .required("Informe a Carga de trabalho segura do material"),
+  cintasQuantity: yup.string().required("Informe a quantidade de cintas/nine"),
   companyName: yup
     .string()
-    .required('Informe o nome da empresa que forneceu o material'),
+    .required("Informe o nome da empresa que forneceu o material"),
   cargoLateralExcess: yup
     .string()
-    .required('Informe o tamanho do excesso lateral da carga'),
+    .required("Informe o tamanho do excesso lateral da carga"),
   cargoHeightExcess: yup
     .string()
-    .required('Informe o tamano do excesso de altura da carga'),
-  cargoDate: yup.string().required('Informe a data do carregamento'),
+    .required("Informe o tamano do excesso de altura da carga"),
+  cargoDate: yup.string().required("Informe a data do carregamento"),
   image: yup.array().of(
     yup.object({
-      imageTitle: yup.string().required('Informe o título da imagem'),
-      imageDescription: yup.string().required('Informe a descrição da imagem')
+      imageTitle: yup.string().required("Informe o título da imagem"),
+      imageDescription: yup.string().required("Informe a descrição da imagem"),
     })
-  )
+  ),
 });
 
 export default function LashingCertificateForm({ route }) {
@@ -102,22 +101,22 @@ export default function LashingCertificateForm({ route }) {
     getValues,
     setValue,
     watch,
-    reset
+    reset,
   } = useForm<LashingCertificateFormProps>({
-    resolver: yupResolver(LashingCertificateFormSchema)
+    resolver: yupResolver(LashingCertificateFormSchema),
   });
 
   const { data, mode } = route.params;
 
-  const isViewing = mode === 'view';
+  const isViewing = mode === "view";
 
   useEffect(() => {
-    if (data && (mode === 'edit' || mode === 'view')) {
+    if (data && (mode === "edit" || mode === "view")) {
       Object.keys(data).forEach((key) => {
         setValue(key, data[key]);
       });
     }
-    if (mode === 'create') {
+    if (mode === "create") {
       reset();
     }
   }, [data]);
@@ -127,21 +126,15 @@ export default function LashingCertificateForm({ route }) {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'image'
+    name: "image",
   });
 
   const navigation = useNavigation();
   const realm = useRealm();
   const values = getValues();
 
-  const { generateForm } = useGenerateForm();
-
-  const handleClickButton = () => {
-    generateForm(values);
-  };
-
   function handleBack() {
-    navigation.navigate('lashingCertificate');
+    navigation.navigate("lashingCertificate");
   }
 
   function getImageByIndex(index: number) {
@@ -150,12 +143,12 @@ export default function LashingCertificateForm({ route }) {
 
   async function handleNewFormRegister() {
     try {
-      if (mode === 'edit' || mode === 'view') {
-        const { ObjectId } = require('bson');
+      if (mode === "edit" || mode === "view") {
+        const { ObjectId } = require("bson");
         const objectId = new ObjectId(data._id);
         let item = realm
           .objects(LashingFormSchema)
-          .filtered('_id == $0', objectId);
+          .filtered("_id == $0", objectId);
         if (item) {
           realm.write(() => {
             Object.keys(data).forEach((key) => {
@@ -167,14 +160,14 @@ export default function LashingCertificateForm({ route }) {
       } else {
         realm.write(() => {
           return realm.create(LashingFormSchema, {
-            ...values
+            ...values,
           });
         });
-        Alert.alert('Chamado', 'Formulário cadastrado com sucesso!');
+        Alert.alert("Chamado", "Formulário cadastrado com sucesso!");
         handleBack();
       }
     } catch (error) {
-      Alert.alert('Erro', 'Preencha todos os campos do formulário!');
+      Alert.alert("Erro", "Preencha todos os campos do formulário!");
       console.log(error);
     }
   }
@@ -183,7 +176,7 @@ export default function LashingCertificateForm({ route }) {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
-      alert('Você precisa conceder permissão para acessar suas fotos!');
+      alert("Você precisa conceder permissão para acessar suas fotos!");
       return;
     }
 
@@ -192,12 +185,12 @@ export default function LashingCertificateForm({ route }) {
       return;
     }
     const base64 = await FileSystem.readAsStringAsync(pickerResult.uri, {
-      encoding: 'base64'
+      encoding: "base64",
     });
     append({
-      imageTitle: '',
-      imageDescription: '',
-      imageUrl: base64
+      imageTitle: "",
+      imageDescription: "",
+      imageUrl: base64,
     });
   };
 
@@ -591,7 +584,7 @@ export default function LashingCertificateForm({ route }) {
                   </Box> */}
                   <Image
                     source={{
-                      uri: `data:image/jpeg;base64,${getImageByIndex(index)}`
+                      uri: `data:image/jpeg;base64,${getImageByIndex(index)}`,
                     }}
                     alt="Imagem"
                     resizeMode="cover"
@@ -600,7 +593,7 @@ export default function LashingCertificateForm({ route }) {
                     style={{
                       width: 350,
                       height: 40,
-                      borderRadius: 12
+                      borderRadius: 12,
                     }}
                   />
                 </Box>
@@ -665,10 +658,10 @@ export default function LashingCertificateForm({ route }) {
             </Box>
           );
         })}
-        {mode !== 'view' && (
+        {mode !== "view" && (
           <Button
             text={
-              mode === 'edit' ? 'Atualizar Formulário' : 'Enviar Formulário'
+              mode === "edit" ? "Atualizar Formulário" : "Enviar Formulário"
             }
             width="full"
             onPress={handleSubmit(handleNewFormRegister)}
