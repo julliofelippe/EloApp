@@ -9,7 +9,8 @@ import * as Sharing from 'expo-sharing';
 const useGenerateForm = () => {
   const generateForm = async (data) => {
     const formData = {
-      certificateNumber: data.certificateNumber
+      certificateNumber: data.certificateNumber,
+      ...data
     };
 
     const permissions =
@@ -42,7 +43,7 @@ const useGenerateForm = () => {
       await FileSystem.writeAsStringAsync(fileName, out, {
         encoding: FileSystem.EncodingType.Base64
       });
-
+      console.log(formData);
       Sharing.shareAsync(fileName);
 
       console.log(`Documento gerado e salvo: ${fileName}`);
