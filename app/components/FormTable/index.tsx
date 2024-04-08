@@ -22,14 +22,14 @@ export default function FormTable({ item, formName, navigation }) {
   console.log(item);
 
   const handleEdit = () => {
-    navigation.navigate('relatorioVistoria', {
+    navigation.navigate('lashingCertificate', {
       data: item,
       mode: 'edit'
     });
   };
 
   const handleView = () => {
-    navigation.navigate('relatorioVistoria', {
+    navigation.navigate('lashingCertificate', {
       data: item,
       mode: 'view'
     });

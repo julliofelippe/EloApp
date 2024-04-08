@@ -141,7 +141,7 @@ export default function LashingCertificateForm({ route }) {
   };
 
   function handleBack() {
-    navigation.navigate('ataVistoria');
+    navigation.navigate('lashingCertificate');
   }
 
   function getImageByIndex(index: number) {

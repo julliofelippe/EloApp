@@ -68,7 +68,7 @@ export default function HomePage({ navigation }) {
             imageSize={25}
             title="Lashing"
             textColor="#e7781c"
-            route="ataVistoria"
+            route="newLashingCertificate"
             width={200}
             backgroundColor="#d6d6d6"
             imageColor="#e7781c"
@@ -79,7 +79,7 @@ export default function HomePage({ navigation }) {
             imageSize={25}
             title="Carro"
             textColor="#e7781c"
-            route="ataVistoria"
+            route="pawnCertificate"
             width={200}
             backgroundColor="#d6d6d6"
             imageColor="#e7781c"
