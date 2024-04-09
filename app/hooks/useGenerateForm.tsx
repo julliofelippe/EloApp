@@ -3,13 +3,16 @@ import { StorageAccessFramework } from 'expo-file-system';
 import { Buffer } from 'buffer';
 import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
-import { base64LashingCertificate } from '../utils/base64-lashing-certificate.js';
 import * as Sharing from 'expo-sharing';
+
+import { base64LashingCertificate } from '../utils/base64-lashing-certificate.js';
+import dateConverter from '../utils/dateConverter.js';
 
 const useGenerateForm = () => {
   const generateForm = async (data) => {
     const formData = {
       certificateNumber: data.certificateNumber,
+      formattedDate: dateConverter(data.date),
       ...data
     };
 
