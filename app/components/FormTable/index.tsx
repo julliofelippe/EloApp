@@ -21,7 +21,6 @@ export default function FormTable({ item, formName, navigation }) {
       console.log(error);
     }
   }, [realm]);
-  console.log(item);
 
   const handleEdit = () => {
     navigation.navigate('lashingCertificate', {

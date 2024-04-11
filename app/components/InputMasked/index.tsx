@@ -3,10 +3,10 @@ import { IInputProps, FormControl } from 'native-base';
 
 type Props = IInputProps & {
   errorText?: string | null;
+  isInvalid?: any;
 };
 
 export default function InputMasked({
-  onChangeText,
   errorText = null,
   isInvalid,
   ...rest
@@ -27,11 +27,10 @@ export default function InputMasked({
           padding: 13
         }}
         type="datetime"
-        placeholder="23/01/2004"
-        onChangeText={onChangeText}
         options={{
           format: 'DD/MM/YYYY'
         }}
+        {...rest}
       />
       <FormControl.ErrorMessage>{errorText}</FormControl.ErrorMessage>
     </FormControl>

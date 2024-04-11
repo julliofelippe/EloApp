@@ -15,6 +15,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { Alert, TouchableNativeFeedback } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { ObjectId } from 'bson';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -22,6 +24,7 @@ import { LashingFormSchema } from '../models/lashingFormSchema';
 import { useRealm } from '@realm/react';
 import { useEffect } from 'react';
 import ModalText from '../components/TextModal';
+import LoadingScreen from '../components/LoadingScreen';
 import InputMasked from '../components/InputMasked';
 
 type LashingCertificateFormProps = {
@@ -106,20 +109,24 @@ export default function LashingCertificateForm({ route }) {
     resolver: yupResolver(LashingCertificateFormSchema)
   });
 
-  const { data, mode } = route.params;
+  const [isLoading, setIsLoading] = useState(false);
 
-  const isViewing = mode === 'view';
+  const { data: dataLashing, mode: modeLashing } = route.params;
+
+  // console.log('dados:', route.params);
+
+  const isViewing = modeLashing === 'view';
 
   useEffect(() => {
-    if (data && (mode === 'edit' || mode === 'view')) {
-      Object.keys(data).forEach((key) => {
-        setValue(key, data[key]);
+    if (dataLashing && (modeLashing === 'edit' || modeLashing === 'view')) {
+      Object.keys(dataLashing).forEach((key) => {
+        setValue(key, dataLashing[key]);
+        console.log('useEffect:', dataLashing);
       });
-    }
-    if (mode === 'create') {
+    } else {
       reset();
     }
-  }, [data]);
+  }, [dataLashing]);
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -134,7 +141,7 @@ export default function LashingCertificateForm({ route }) {
   const values = getValues();
 
   function handleBack() {
-    navigation.navigate('lashingCertificate');
+    navigation.navigate('newLashingCertificate');
   }
 
   function getImageByIndex(index: number) {
@@ -143,32 +150,40 @@ export default function LashingCertificateForm({ route }) {
 
   async function handleNewFormRegister() {
     try {
-      if (mode === 'edit' || mode === 'view') {
-        const { ObjectId } = require('bson');
-        const objectId = new ObjectId(data._id);
+      if (modeLashing === 'edit' || modeLashing === 'view') {
+        const objectId = new ObjectId(dataLashing._id);
+        // console.log('dataLashing:', dataLashing);
         let item = realm
           .objects(LashingFormSchema)
           .filtered('_id == $0', objectId);
         if (item) {
+          setIsLoading(true);
           realm.write(() => {
-            Object.keys(data).forEach((key) => {
+            Object.keys(dataLashing).forEach((key) => {
               item[0][key] = getValues()[key];
             });
           });
+
           handleBack();
+          Alert.alert('Sucesso', 'Formulário atualizado com sucesso!');
         }
       } else {
+        setIsLoading(true);
         realm.write(() => {
           return realm.create(LashingFormSchema, {
             ...values
           });
         });
-        Alert.alert('Chamado', 'Formulário cadastrado com sucesso!');
         handleBack();
+        Alert.alert('Sucesso', 'Formulário cadastrado com sucesso!');
       }
     } catch (error) {
-      Alert.alert('Erro', 'Preencha todos os campos do formulário!');
-      console.log(error);
+      Alert.alert(
+        'Erro',
+        'Algo inesperado aconteceu. Entre em contato com o administrador!'
+      );
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -194,17 +209,19 @@ export default function LashingCertificateForm({ route }) {
     });
   };
 
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   return (
     <ScrollView ref={ref}>
+      {/* <LoadingScreen /> */}
       <VStack bgColor="gray.100" flex={1} alignItems="center" px={8}>
         <Heading mt="60px" mb="12">
           Lashing Certificate Form
         </Heading>
-
         <Text fontSize="md" h={10}>
           Detalhes do Certificado
         </Text>
-
         <Box>
           <Text>Nome do cliente</Text>
           <Controller
@@ -221,7 +238,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text> Número do certificado</Text>
           <Controller
@@ -238,7 +254,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Data do Certificado</Text>
 
@@ -246,7 +261,7 @@ export default function LashingCertificateForm({ route }) {
             control={control}
             name="date"
             render={({ field: { onChange, value } }) => (
-              <Input
+              <InputMasked
                 defaultValue={value}
                 placeholder="23/01/2014"
                 onChangeText={onChange}
@@ -275,7 +290,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Número da Reserva</Text>
           <Controller
@@ -292,11 +306,9 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Text fontSize="md" h={10}>
           Detalhes do Carregamento
         </Text>
-
         <Box>
           <Text>Porto de origem</Text>
           <Controller
@@ -313,7 +325,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Porto de destino</Text>
           <Controller
@@ -330,7 +341,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Número do carregamento</Text>
           <Controller
@@ -347,7 +357,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Descrição do carregamento</Text>
           <Controller
@@ -364,7 +373,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Dimensões do Carregamento</Text>
           <Controller
@@ -381,7 +389,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Peso do Carregamento</Text>
           <Controller
@@ -398,11 +405,9 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Text fontSize="md" h={10}>
           Detalhes do Material de Amarração
         </Text>
-
         <Box>
           <Text>Número do Material</Text>
           <Controller
@@ -419,7 +424,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Descrição do Material</Text>
           <Controller
@@ -436,7 +440,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Quantidade do Material</Text>
           <Controller
@@ -453,7 +456,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Carga de trabalho segura do Material</Text>
           <Controller
@@ -470,11 +472,9 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Text fontSize="md" h={10}>
           Observações do Carregamento
         </Text>
-
         <Box>
           <Text>Quantidade de Cintas</Text>
           <Controller
@@ -491,7 +491,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Nome da empresa que forneceu o material</Text>
           <Controller
@@ -508,7 +507,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Excesso lateral da carga</Text>
           <Controller
@@ -525,7 +523,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Excesso de altura da carga</Text>
           <Controller
@@ -542,7 +539,6 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box>
           <Text>Data do Carregamento</Text>
           <Controller
@@ -559,11 +555,9 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-
         <Box px={5}>
           <Button text="Adicionar Imagem" width={48} onPress={addNewImage} />
         </Box>
-
         {fields.map((field, index) => {
           return (
             <Box key={field.id} alignItems="center" my={5}>
@@ -658,10 +652,12 @@ export default function LashingCertificateForm({ route }) {
             </Box>
           );
         })}
-        {mode !== 'view' && (
+        {modeLashing !== 'view' && (
           <Button
             text={
-              mode === 'edit' ? 'Atualizar Formulário' : 'Enviar Formulário'
+              modeLashing === 'edit'
+                ? 'Atualizar Formulário'
+                : 'Enviar Formulário'
             }
             width="full"
             onPress={handleSubmit(handleNewFormRegister)}

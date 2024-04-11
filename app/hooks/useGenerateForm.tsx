@@ -6,7 +6,7 @@ import Docxtemplater from 'docxtemplater';
 import * as Sharing from 'expo-sharing';
 
 import { base64LashingCertificate } from '../utils/base64-lashing-certificate.js';
-import dateConverter from '../utils/dateConverter.js';
+import dateConverter from '../utils/dateConverter';
 
 const useGenerateForm = () => {
   const generateForm = async (data) => {
@@ -15,7 +15,6 @@ const useGenerateForm = () => {
       formattedDate: dateConverter(data.date),
       ...data
     };
-
     const permissions =
       await StorageAccessFramework.requestDirectoryPermissionsAsync();
     if (!permissions.granted) {
@@ -46,7 +45,6 @@ const useGenerateForm = () => {
       await FileSystem.writeAsStringAsync(fileName, out, {
         encoding: FileSystem.EncodingType.Base64
       });
-      console.log(formData);
       Sharing.shareAsync(fileName);
 
       console.log(`Documento gerado e salvo: ${fileName}`);

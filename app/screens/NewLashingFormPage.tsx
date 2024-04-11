@@ -6,6 +6,7 @@ import Card from '../components/Card/Index';
 
 export default function NewLashingFormPage({ navigation }) {
   const tasks = useQuery('LashingFormSchema');
+  console.log('tasks:', tasks);
   return (
     <ScrollView>
       <VStack flex={1} alignItems="center" justifyContent="center" my={8}>
