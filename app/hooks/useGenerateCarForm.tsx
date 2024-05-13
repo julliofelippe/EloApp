@@ -8,11 +8,11 @@ import * as Sharing from 'expo-sharing';
 import { base64LashingCertificate } from '../utils/base64-lashing-certificate.js';
 import dateConverter from '../utils/dateConverter';
 
-const useGenerateForm = () => {
+const useGenerateCarForm = () => {
   const generateForm = async (data) => {
     const formData = {
-      certificateNumber: data.certificateNumber,
-      formattedDate: dateConverter(data.date),
+      containerNumber: data.containerNumber,
+      formattedDate: dateConverter(data.reportDate),
       ...data
     };
     const permissions =
@@ -24,7 +24,7 @@ const useGenerateForm = () => {
 
     const fileName =
       FileSystem.documentDirectory +
-      `Lashing_Certificate_Nº_${formData.certificateNumber}.docx`;
+      `Car_Certificate_Nº_${formData.containerNumber}.docx`;
 
     try {
       const zip = new PizZip(Buffer.from(base64LashingCertificate, 'base64'));
@@ -56,4 +56,4 @@ const useGenerateForm = () => {
   return { generateForm };
 };
 
-export default useGenerateForm;
+export default useGenerateCarForm;

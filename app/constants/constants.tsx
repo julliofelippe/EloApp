@@ -8,6 +8,8 @@ import RelatorioVistoria from '../screens/RelatorioVistoria';
 import AtaVistoria from '../screens/AtaVistoria';
 import Forms from '../screens/Forms';
 import PawnCertificatePage from '../screens/PawnCertificatePage';
+import CarCertificateForm from '../screens/CarCertificateForm';
+import NewCarFormPage from '../screens/newCarCertificateForm';
 
 export const constant = {
   SPACING: 16,
@@ -65,6 +67,22 @@ export const ScreensArray = [
     title: '',
     display: 'none',
     component: PawnCertificatePage
+  },
+  {
+    route: 'newCarCertificateForm',
+    label: 'Relatório de Carro',
+    icon: 'file-text',
+    title: '',
+    display: 'none',
+    component: NewCarFormPage
+  },
+  {
+    route: 'carCertificateForm',
+    label: 'Relatório de Carro',
+    icon: 'file-text',
+    title: '',
+    display: 'none',
+    component: CarCertificateForm
   }
 ];
 
@@ -76,7 +94,7 @@ export const drawerMenu = [
     route: 'Settings',
     menuList: [
       { title: '• Lashing', routeTo: 'newLashingCertificate' },
-      { title: '• Carro', routeTo: 'pawnCertificate' }
+      { title: '• Carro', routeTo: 'newCarCertificateForm' }
     ]
   }
 ];

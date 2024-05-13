@@ -79,7 +79,7 @@ export default function HomePage({ navigation }) {
             imageSize={25}
             title="Carro"
             textColor="#e7781c"
-            route="pawnCertificate"
+            route="newCarCertificateForm"
             width={200}
             backgroundColor="#d6d6d6"
             imageColor="#e7781c"

@@ -3,11 +3,15 @@ import { HStack, Box, VStack, Text } from 'native-base';
 import { Feather } from '@expo/vector-icons';
 import { TouchableNativeFeedback } from 'react-native';
 import { useRealm } from '@realm/react';
-import useGenerateForm from '../../hooks/useGenerateForm';
 
-export default function FormTable({ item, formName, navigation }) {
+export default function FormTable({
+  item,
+  formName,
+  generateFormFunction,
+  navigation,
+  route
+}) {
   const realm = useRealm();
-  const { generateForm } = useGenerateForm();
 
   const handleDeleteTask = useCallback((): void => {
     try {
@@ -23,14 +27,14 @@ export default function FormTable({ item, formName, navigation }) {
   }, [realm]);
 
   const handleEdit = () => {
-    navigation.navigate('lashingCertificate', {
+    navigation.navigate(route, {
       data: item,
       mode: 'edit'
     });
   };
 
   const handleView = () => {
-    navigation.navigate('lashingCertificate', {
+    navigation.navigate(route, {
       data: item,
       mode: 'view'
     });
@@ -55,7 +59,7 @@ export default function FormTable({ item, formName, navigation }) {
           <Feather name="file-text" size={36} color="black" />
         </Box>
         <Text px="4" fontSize="lg" pt="3">
-          {formName} Nº {item.certificateNumber}
+          {formName} Nº {item.containerNumber}
         </Text>
       </HStack>
       <HStack justifyContent="center" alignItems="center">
@@ -81,7 +85,7 @@ export default function FormTable({ item, formName, navigation }) {
             <Feather name="edit" size={22} />
           </Box>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={() => generateForm(item)}>
+        <TouchableNativeFeedback onPress={() => generateFormFunction(item)}>
           <Box
             backgroundColor="orange.300"
             px={6}

@@ -1,3 +1,4 @@
-import { LashingFormSchema } from './lashingFormSchema';
+import { LashingImageList, LashingFormSchema } from './lashingFormSchema';
+import { CarFormSchema } from './carFormSchema';
 
-export const schemas = [LashingFormSchema];
+export const schemas = [LashingImageList, LashingFormSchema, CarFormSchema];

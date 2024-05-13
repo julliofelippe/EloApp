@@ -47,7 +47,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.22.5",
-    "@babel/plugin-proposal-decorators": "^7.22.5",
+    "@babel/plugin-proposal-decorators": "^7.24.1",
     "@realm/babel-plugin": "^0.1.1",
     "@types/react": "~18.2.13",
     "eas-cli": "^7.6.0",

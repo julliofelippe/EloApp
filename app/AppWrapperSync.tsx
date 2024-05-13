@@ -7,6 +7,7 @@ import AppSync from './AppSync';
 
 import { RealmProvider } from '@realm/react';
 import { OpenRealmBehaviorType, OpenRealmTimeOutBehavior } from 'realm';
+import { migrationFunction } from './models/migrations/1_lashingForm_Migration';
 
 export const AppWrapperSync = ({ appId }) => {
   // If we are logged in, add the sync configuration the the RealmProvider and render the app
@@ -15,6 +16,8 @@ export const AppWrapperSync = ({ appId }) => {
       <AppProvider id={appId}>
         <RealmProvider
           schema={schemas}
+          schemaVersion={2}
+          onMigration={migrationFunction}
           sync={{
             flexible: true,
             existingRealmFileBehavior: {

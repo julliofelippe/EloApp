@@ -22,7 +22,6 @@ module.exports = function (api) {
     presets: ['babel-preset-expo'],
     plugins: [
       'react-native-reanimated/plugin',
-      '@realm/babel-plugin',
       ['@babel/plugin-proposal-decorators', { legacy: true }]
     ]
   };

@@ -13,19 +13,25 @@ import * as ImagePicker from 'expo-image-picker';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { Feather } from '@expo/vector-icons';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { Alert, TouchableNativeFeedback } from 'react-native';
-import Spinner from 'react-native-loading-spinner-overlay';
+import { useRealm } from '@realm/react';
+import { useEffect } from 'react';
 import { ObjectId } from 'bson';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { LashingFormSchema } from '../models/lashingFormSchema';
-import { useRealm } from '@realm/react';
-import { useEffect } from 'react';
 import ModalText from '../components/TextModal';
 import LoadingScreen from '../components/LoadingScreen';
 import InputMasked from '../components/InputMasked';
+
+type Image = {
+  imageUrl: any;
+  imageTitle: any;
+  imageDescription: any;
+};
 
 type LashingCertificateFormProps = {
   clientName: string;
@@ -48,11 +54,7 @@ type LashingCertificateFormProps = {
   cargoLateralExcess: string;
   cargoHeightExcess: string;
   cargoDate: string;
-  image: {
-    imageUrl: string;
-    imageTitle: string;
-    imageDescription: string;
-  };
+  image: Image[];
 };
 
 const LashingCertificateFormSchema = yup.object({
@@ -89,9 +91,10 @@ const LashingCertificateFormSchema = yup.object({
     .required('Informe o tamano do excesso de altura da carga'),
   cargoDate: yup.string().required('Informe a data do carregamento'),
   image: yup.array().of(
-    yup.object({
+    yup.object().shape({
+      imageUrl: yup.string().required('Informe a URL da imagem'),
       imageTitle: yup.string().required('Informe o título da imagem'),
-      imageDescription: yup.string().required('Informe a descrição da imagem')
+      imageDescription: yup.string()
     })
   )
 });
@@ -104,37 +107,45 @@ export default function LashingCertificateForm({ route }) {
     getValues,
     setValue,
     watch,
-    reset
+    reset,
+    resetField
   } = useForm<LashingCertificateFormProps>({
-    resolver: yupResolver(LashingCertificateFormSchema)
+    // resolver: yupResolver(LashingCertificateFormSchema)
   });
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const { data: dataLashing, mode: modeLashing } = route.params;
 
-  // console.log('dados:', route.params);
-
-  const isViewing = modeLashing === 'view';
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'image'
+  });
 
   useEffect(() => {
     if (dataLashing && (modeLashing === 'edit' || modeLashing === 'view')) {
       Object.keys(dataLashing).forEach((key) => {
         setValue(key, dataLashing[key]);
-        console.log('useEffect:', dataLashing);
+        if (key === 'image') {
+          const images = dataLashing[key];
+          images.map((image) => {
+            append({
+              imageTitle: image.imageTitle,
+              imageDescription: image.imageDescription,
+              imageUrl: image.imageUrl
+            });
+          });
+        }
       });
     } else {
       reset();
     }
   }, [dataLashing]);
 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const isViewing = modeLashing === 'view';
+
   const ref = React.useRef(null);
   useScrollToTop(ref);
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'image'
-  });
 
   const navigation = useNavigation();
   const realm = useRealm();
@@ -152,10 +163,9 @@ export default function LashingCertificateForm({ route }) {
     try {
       if (modeLashing === 'edit' || modeLashing === 'view') {
         const objectId = new ObjectId(dataLashing._id);
-        // console.log('dataLashing:', dataLashing);
         let item = realm
           .objects(LashingFormSchema)
-          .filtered('_id == $0', objectId);
+          .filtered('_id == $0', objectId.toString());
         if (item) {
           setIsLoading(true);
           realm.write(() => {
@@ -182,6 +192,7 @@ export default function LashingCertificateForm({ route }) {
         'Erro',
         'Algo inesperado aconteceu. Entre em contato com o administrador!'
       );
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -194,7 +205,6 @@ export default function LashingCertificateForm({ route }) {
       alert('Você precisa conceder permissão para acessar suas fotos!');
       return;
     }
-
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
     if (pickerResult.canceled === true) {
       return;
@@ -212,9 +222,9 @@ export default function LashingCertificateForm({ route }) {
   if (isLoading) {
     return <LoadingScreen />;
   }
+
   return (
     <ScrollView ref={ref}>
-      {/* <LoadingScreen /> */}
       <VStack bgColor="gray.100" flex={1} alignItems="center" px={8}>
         <Heading mt="60px" mb="12">
           Lashing Certificate Form
@@ -262,7 +272,7 @@ export default function LashingCertificateForm({ route }) {
             name="date"
             render={({ field: { onChange, value } }) => (
               <InputMasked
-                defaultValue={value}
+                value={value}
                 placeholder="23/01/2014"
                 onChangeText={onChange}
                 errorText={errors.date?.message}
@@ -556,9 +566,11 @@ export default function LashingCertificateForm({ route }) {
           ></Controller>
         </Box>
         <Box px={5}>
-          <Button text="Adicionar Imagem" width={48} onPress={addNewImage} />
+          <Box px={5}>
+            <Button text="Adicionar Imagem" width={48} onPress={addNewImage} />
+          </Box>
         </Box>
-        {fields.map((field, index) => {
+        {fields?.map((field, index) => {
           return (
             <Box key={field.id} alignItems="center" my={5}>
               <TouchableNativeFeedback>
@@ -599,9 +611,9 @@ export default function LashingCertificateForm({ route }) {
                     key={field.id}
                     control={control}
                     name={`image.${index}.imageTitle`}
-                    render={({ field: { onChange } }) => (
+                    render={({ field: { onChange, value } }) => (
                       <Input
-                        value={getValues(`image.${index}.imageTitle`)}
+                        value={value}
                         placeholder="Barco NX 340"
                         onChangeText={onChange}
                         errorText={errors.cargoDate?.message}
@@ -623,9 +635,9 @@ export default function LashingCertificateForm({ route }) {
                   <Controller
                     control={control}
                     name={`image.${index}.imageDescription`}
-                    render={({ field: { onChange } }) => (
+                    render={({ field: { onChange, value } }) => (
                       <Input
-                        value={getValues(`image.${index}.imageDescription`)}
+                        value={value}
                         placeholder="Descrição da Imagem"
                         onChangeText={onChange}
                         errorText={errors.cargoDate?.message}
