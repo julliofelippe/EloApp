@@ -5,7 +5,7 @@ import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
 import * as Sharing from 'expo-sharing';
 
-import { base64LashingCertificate } from '../utils/base64-lashing-certificate.js';
+import { base64CarCertificate } from '../utils/base64-car-certificate.js';
 import dateConverter from '../utils/dateConverter';
 
 const useGenerateCarForm = () => {
@@ -27,7 +27,7 @@ const useGenerateCarForm = () => {
       `Car_Certificate_Nº_${formData.containerNumber}.docx`;
 
     try {
-      const zip = new PizZip(Buffer.from(base64LashingCertificate, 'base64'));
+      const zip = new PizZip(Buffer.from(base64CarCertificate, 'base64'));
 
       const doc = new Docxtemplater(zip, {
         paragraphLoop: true,
