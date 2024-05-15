@@ -2,11 +2,21 @@ import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRealm } from '@realm/react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, useFieldArray } from 'react-hook-form';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { ObjectId } from 'bson';
-import { Box, HStack, Heading, ScrollView, Text, VStack } from 'native-base';
-import { Alert } from 'react-native';
+import {
+  Box,
+  HStack,
+  Heading,
+  Image,
+  ScrollView,
+  Text,
+  VStack
+} from 'native-base';
+import { Alert, TouchableNativeFeedback } from 'react-native';
 
 import { CarFormSchema } from '../models/carFormSchema';
 import Input from '../components/Input';
@@ -14,6 +24,14 @@ import LoadingScreen from '../components/LoadingScreen';
 import InputMasked from '../components/InputMasked';
 import Button from '../components/Button';
 import SelectModal from '../components/SelectModal';
+import ModalText from '../components/TextModal';
+import { ModalImageDescription } from '../data/ModalImageDescription';
+
+type Image = {
+  imageUrl: any;
+  imageTitle: any;
+  imageDescription: any;
+};
 
 type CarCertificateFormProps = {
   containerNumber: string;
@@ -42,6 +60,7 @@ type CarCertificateFormProps = {
   certificateDescription: string;
   containerDescription: string;
   containerStatus: string;
+  image: Image[];
 };
 
 const modalActivity = [
@@ -72,16 +91,23 @@ const CarCertificateFormSchema = yup.object({
   breakIn: yup.string().required('Informe o horário de entrada do intervalo'),
   breakOut: yup.string().required('Informe o horário de saída do intervalo'),
   breakTurn: yup.string().required('Informe o turno'),
-  morningWeather: yup.string(),
-  morningStatus: yup.string(),
-  afternoonWeather: yup.string(),
-  afternoonStatus: yup.string(),
-  nightWeather: yup.string(),
-  nightStatus: yup.string(),
-  activity: yup.string(),
-  certificateDescription: yup.string(),
-  containerDescription: yup.string(),
-  containerStatus: yup.string()
+  morningWeather: yup.string().notRequired(),
+  morningStatus: yup.string().notRequired(),
+  afternoonWeather: yup.string().notRequired(),
+  afternoonStatus: yup.string().notRequired(),
+  nightWeather: yup.string().notRequired(),
+  nightStatus: yup.string().notRequired(),
+  activity: yup.string().notRequired(),
+  certificateDescription: yup.string().notRequired(),
+  containerDescription: yup.string().notRequired(),
+  containerStatus: yup.string().notRequired(),
+  image: yup.array().of(
+    yup.object().shape({
+      imageUrl: yup.string().notRequired(),
+      imageTitle: yup.string().notRequired(),
+      imageDescription: yup.string().notRequired()
+    })
+  )
 });
 
 export default function CarCertificateForm({ route }) {
@@ -103,35 +129,65 @@ export default function CarCertificateForm({ route }) {
       afternoonStatus: '',
       nightWeather: '',
       nightStatus: '',
+      activity: '',
       certificateDescription: '',
       containerDescription: '',
-      containerStatus: ''
+      containerStatus: '',
+      image: []
     }
   });
 
   const { data: dataCar, mode: modeCar } = route.params;
 
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'image'
+  });
+
   useEffect(() => {
+    const formData = watch();
+    Object.keys(formData).forEach((key) => {
+      if (key === 'image') {
+        setValue(key, []);
+      } else {
+        setValue(key, '');
+      }
+    });
     if (dataCar && (modeCar === 'edit' || modeCar === 'view')) {
       Object.keys(dataCar).forEach((key) => {
         setValue(key, dataCar[key]);
+        if (key === 'image') {
+          const images = dataCar[key];
+          images.map((image) => {
+            append({
+              imageTitle: image.imageTitle,
+              imageDescription: image.imageDescription,
+              imageUrl: image.imageUrl
+            });
+          });
+        }
       });
-    } else {
-      reset();
     }
-  }, [dataCar]);
+  }, [modeCar, dataCar]);
 
   const [isLoading, setIsLoading] = useState(false);
 
   const isViewing = modeCar === 'view';
   const ref = React.useRef(null);
   useScrollToTop(ref);
+
   const navigation = useNavigation();
+
   const realm = useRealm();
+
   const values = getValues();
 
   function handleBack() {
     navigation.navigate('newCarCertificateForm');
+  }
+
+  function getImageByIndex(index: number) {
+    return String(getValues(`image.${index}.imageUrl`));
   }
 
   async function handleNewFormRegister() {
@@ -172,6 +228,27 @@ export default function CarCertificateForm({ route }) {
       setIsLoading(false);
     }
   }
+
+  const addNewImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (permissionResult.granted === false) {
+      alert('Você precisa conceder permissão para acessar suas fotos!');
+      return;
+    }
+    const pickerResult = await ImagePicker.launchImageLibraryAsync();
+    if (pickerResult.canceled === true) {
+      return;
+    }
+    const base64 = await FileSystem.readAsStringAsync(pickerResult.uri, {
+      encoding: 'base64'
+    });
+    append({
+      imageUrl: base64,
+      imageTitle: '',
+      imageDescription: ''
+    });
+  };
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -613,6 +690,109 @@ export default function CarCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
+        <Box px={5}>
+          <Box px={5}>
+            <Button text="Adicionar Imagem" width={48} onPress={addNewImage} />
+          </Box>
+        </Box>
+        {fields?.map((field, index) => {
+          return (
+            <Box key={field.id} alignItems="center" my={5}>
+              <TouchableNativeFeedback>
+                <Box w="80%" h="200" alignItems="center" mb={5}>
+                  {/* <Box
+                backgroundColor="orange.300"
+                p="7px"
+                borderRadius={20}
+                style={{
+                  position: 'absolute',
+                  zIndex: 2,
+                  bottom: 10,
+                  right: 20
+                }}
+              >
+                <Feather name="edit" size={24} color="black" />
+              </Box> */}
+                  <Image
+                    source={{
+                      uri: `data:image/jpeg;base64,${getImageByIndex(index)}`
+                    }}
+                    alt="Imagem"
+                    resizeMode="cover"
+                    flex={1}
+                    borderRadius={20}
+                    style={{
+                      width: 350,
+                      height: 40,
+                      borderRadius: 12
+                    }}
+                  />
+                </Box>
+              </TouchableNativeFeedback>
+              <HStack>
+                <Box>
+                  <Text>Título da Imagem</Text>
+                  <Controller
+                    key={field.id}
+                    control={control}
+                    name={`image.${index}.imageTitle`}
+                    render={({ field: { onChange, value } }) => (
+                      <Input
+                        value={value}
+                        placeholder="Título"
+                        onChangeText={onChange}
+                        errorText={errors.local?.message}
+                        isDisabled={isViewing}
+                        setWidth="320px"
+                      />
+                    )}
+                  ></Controller>
+                </Box>
+                <ModalText
+                  onSelect={setValue}
+                  fieldName={`image.${index}.imageTitle`}
+                  fieldHeader="Sugestões de Descrição"
+                  fieldArray={ModalImageDescription}
+                />
+              </HStack>
+
+              <HStack>
+                <Box>
+                  <Text>Descrição da Imagem</Text>
+                  <Controller
+                    control={control}
+                    name={`image.${index}.imageDescription`}
+                    render={({ field: { onChange, value } }) => (
+                      <Input
+                        value={value}
+                        placeholder="Descrição da Imagem"
+                        onChangeText={onChange}
+                        errorText={errors.local?.message}
+                        isDisabled={isViewing}
+                        setWidth="320px"
+                      />
+                    )}
+                  ></Controller>
+                </Box>
+                <ModalText
+                  onSelect={setValue}
+                  fieldName={`image.${index}.imageDescription`}
+                  fieldHeader="Sugestões de Descrição"
+                  fieldArray={ModalImageDescription}
+                />
+              </HStack>
+
+              <Box px={5}>
+                <Button
+                  text="Remover Imagem"
+                  width={48}
+                  backgroundColor="red.500"
+                  onPress={() => remove(index)}
+                />
+              </Box>
+            </Box>
+          );
+        })}
         {modeCar !== 'view' && (
           <Button
             text={

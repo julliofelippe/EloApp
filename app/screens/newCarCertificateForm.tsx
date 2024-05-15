@@ -7,6 +7,7 @@ import useGenerateCarForm from '../hooks/useGenerateCarForm';
 export default function NewCarFormPage({ navigation }) {
   const { generateForm } = useGenerateCarForm();
   const tasks = useQuery('CarFormSchema');
+  console.log('tasks:', tasks);
   return (
     <ScrollView>
       <VStack flex={1} alignItems="center" justifyContent="center" my={8}>

@@ -13,7 +13,6 @@ import * as ImagePicker from 'expo-image-picker';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { Feather } from '@expo/vector-icons';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { Alert, TouchableNativeFeedback } from 'react-native';
 import { useRealm } from '@realm/react';
@@ -137,9 +136,16 @@ export default function LashingCertificateForm({ route }) {
         }
       });
     } else {
-      reset();
+      const formData = watch();
+      Object.keys(formData).forEach((key) => {
+        if (key === 'image') {
+          setValue(key, []);
+        } else {
+          setValue(key, '');
+        }
+      });
     }
-  }, [dataLashing]);
+  }, [modeLashing, dataLashing]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -149,7 +155,9 @@ export default function LashingCertificateForm({ route }) {
   useScrollToTop(ref);
 
   const navigation = useNavigation();
+
   const realm = useRealm();
+
   const values = getValues();
 
   function handleBack() {

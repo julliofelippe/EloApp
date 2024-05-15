@@ -1,5 +1,19 @@
 import Realm, { BSON } from 'realm';
 
+class CarImageList extends Realm.Object<CarImageList> {
+  imageUrl: string;
+  imageTitle: string;
+  imageDescription: string;
+  static schema: Realm.ObjectSchema = {
+    name: 'CarImageList',
+    properties: {
+      imageUrl: 'string',
+      imageTitle: 'string',
+      imageDescription: 'string'
+    }
+  };
+}
+
 class CarFormSchema extends Realm.Object<CarFormSchema> {
   _id: BSON.ObjectId = new BSON.ObjectID();
   containerNumber: string;
@@ -28,6 +42,7 @@ class CarFormSchema extends Realm.Object<CarFormSchema> {
   certificateDescription: string;
   containerDescription: string;
   containerStatus: string;
+  image: Realm.List<CarImageList>;
   static primaryKey: '_id';
   static schema: Realm.ObjectSchema = {
     name: 'CarFormSchema',
@@ -61,7 +76,8 @@ class CarFormSchema extends Realm.Object<CarFormSchema> {
       activity: 'string?',
       certificateDescription: 'string?',
       containerDescription: 'string?',
-      containerStatus: 'string?'
+      containerStatus: 'string?',
+      image: { type: 'list', objectType: 'LashingImageList' }
     }
   };
 }

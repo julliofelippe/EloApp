@@ -7,9 +7,11 @@ import * as Sharing from 'expo-sharing';
 
 import { base64CarCertificate } from '../utils/base64-car-certificate.js';
 import dateConverter from '../utils/dateConverter';
+import base64DataURLToArrayBuffer from '../utils/base64-to-doc.js';
 
 const useGenerateCarForm = () => {
   const generateForm = async (data) => {
+    const ImageModule = require('docxtemplater-image-module-free');
     const isOvacao = data.activity === 'Ovação';
     const isDesova = data.activity === 'Desova';
 
@@ -34,25 +36,48 @@ const useGenerateCarForm = () => {
     try {
       const zip = new PizZip(Buffer.from(base64CarCertificate, 'base64'));
 
+      const imageOpts = {
+        getImage(tag) {
+          return base64DataURLToArrayBuffer(tag);
+        },
+        getSize() {
+          return [550, 300];
+        }
+      };
+
       const doc = new Docxtemplater(zip, {
         paragraphLoop: true,
-        linebreaks: true
+        linebreaks: true,
+        modules: [new ImageModule(imageOpts)]
       });
 
-      doc.render(formData);
+      doc
+        .resolveData({
+          ...formData,
+          image: formData.image.map(
+            ({ imageTitle, imageDescription, imageUrl }, index) => ({
+              imageTitle: imageTitle,
+              imageDescription: imageDescription,
+              imageUrl: imageUrl,
+              imageIndex: `Photo ${index + 1}`
+            })
+          )
+        })
+        .then(async () => {
+          doc.render();
+          const out = doc.getZip().generate({
+            type: 'base64',
+            mimeType:
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+          });
 
-      const out = doc.getZip().generate({
-        type: 'base64',
-        mimeType:
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      });
+          await FileSystem.writeAsStringAsync(fileName, out, {
+            encoding: FileSystem.EncodingType.Base64
+          });
+          Sharing.shareAsync(fileName);
 
-      await FileSystem.writeAsStringAsync(fileName, out, {
-        encoding: FileSystem.EncodingType.Base64
-      });
-      Sharing.shareAsync(fileName);
-
-      console.log(`Documento gerado e salvo: ${fileName}`);
+          console.log(`Documento gerado e salvo: ${fileName}`);
+        });
     } catch (error) {
       console.error('Erro ao gerar ou salvar o documento:', error);
     }

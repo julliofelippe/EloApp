@@ -7,16 +7,16 @@ import * as Sharing from 'expo-sharing';
 
 import { base64LashingCertificate } from '../utils/base64-lashing-certificate.js';
 import dateConverter from '../utils/dateConverter';
+import base64DataURLToArrayBuffer from '../utils/base64-to-doc.js';
 
 const useGenerateLashingForm = () => {
   const generateForm = async (data) => {
+    const ImageModule = require('docxtemplater-image-module-free');
     const formData = {
       certificateNumber: data.certificateNumber,
       formattedDate: dateConverter(data.date),
       ...data
     };
-
-    console.log('image:', formData.image);
 
     const permissions =
       await StorageAccessFramework.requestDirectoryPermissionsAsync();
@@ -32,31 +32,48 @@ const useGenerateLashingForm = () => {
     try {
       const zip = new PizZip(Buffer.from(base64LashingCertificate, 'base64'));
 
+      const imageOpts = {
+        getImage(tag) {
+          return base64DataURLToArrayBuffer(tag);
+        },
+        getSize() {
+          return [550, 300];
+        }
+      };
+
       const doc = new Docxtemplater(zip, {
         paragraphLoop: true,
-        linebreaks: true
+        linebreaks: true,
+        modules: [new ImageModule(imageOpts)]
       });
 
-      doc.render({
-        image: formData.image.map(({ imageTitle, imageDescription }) => ({
-          imageTitle: imageTitle,
-          imageDescription: imageDescription
-        })),
-        ...formData
-      });
+      doc
+        .resolveData({
+          ...formData,
+          image: formData.image.map(
+            ({ imageTitle, imageDescription, imageUrl }, index) => ({
+              imageTitle: imageTitle,
+              imageDescription: imageDescription,
+              imageUrl: imageUrl,
+              imageIndex: `Photo ${index + 1}`
+            })
+          )
+        })
+        .then(async () => {
+          doc.render();
+          const out = doc.getZip().generate({
+            type: 'base64',
+            mimeType:
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+          });
 
-      const out = doc.getZip().generate({
-        type: 'base64',
-        mimeType:
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      });
+          await FileSystem.writeAsStringAsync(fileName, out, {
+            encoding: FileSystem.EncodingType.Base64
+          });
+          Sharing.shareAsync(fileName);
 
-      await FileSystem.writeAsStringAsync(fileName, out, {
-        encoding: FileSystem.EncodingType.Base64
-      });
-      Sharing.shareAsync(fileName);
-
-      console.log(`Documento gerado e salvo: ${fileName}`);
+          console.log(`Documento gerado e salvo: ${fileName}`);
+        });
     } catch (error) {
       console.error('Erro ao gerar ou salvar o documento:', error);
     }
