@@ -29,6 +29,14 @@ export const ScreensArray = [
     component: HomePage
   },
   {
+    route: 'newCarCertificateForm',
+    label: 'Relatório Diário de Carga',
+    icon: 'file-text',
+    title: '',
+    display: '',
+    component: NewCarFormPage
+  },
+  {
     route: 'relatorioVistoria',
     label: 'Relatório de Vistoria',
     icon: 'file-text',
@@ -69,8 +77,8 @@ export const ScreensArray = [
     component: PawnCertificatePage
   },
   {
-    route: 'newCarCertificateForm',
-    label: 'Relatório de Carro',
+    route: 'newCar2CertificateForm',
+    label: 'Relatório de Carga',
     icon: 'file-text',
     title: '',
     display: 'none',
@@ -78,7 +86,7 @@ export const ScreensArray = [
   },
   {
     route: 'carCertificateForm',
-    label: 'Relatório de Carro',
+    label: 'Relatório de Carga',
     icon: 'file-text',
     title: '',
     display: 'none',
@@ -94,7 +102,7 @@ export const drawerMenu = [
     route: 'Settings',
     menuList: [
       { title: '• Lashing', routeTo: 'newLashingCertificate' },
-      { title: '• Carro', routeTo: 'newCarCertificateForm' }
+      { title: '• Carro', routeTo: 'home' }
     ]
   }
 ];

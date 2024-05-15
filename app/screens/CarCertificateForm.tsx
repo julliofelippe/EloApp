@@ -258,7 +258,7 @@ export default function CarCertificateForm({ route }) {
     <ScrollView ref={ref}>
       <VStack bgColor="gray.100" flex={1} alignItems="center" px={8}>
         <Heading mt="60px" mb="12">
-          Formulário de Carros
+          Formulário de Cargas
         </Heading>
         <Text fontSize="md" h={10}>
           Detalhes do Certificado
@@ -743,17 +743,11 @@ export default function CarCertificateForm({ route }) {
                         onChangeText={onChange}
                         errorText={errors.local?.message}
                         isDisabled={isViewing}
-                        setWidth="320px"
+                        setWidth="350px"
                       />
                     )}
                   ></Controller>
                 </Box>
-                <ModalText
-                  onSelect={setValue}
-                  fieldName={`image.${index}.imageTitle`}
-                  fieldHeader="Sugestões de Descrição"
-                  fieldArray={ModalImageDescription}
-                />
               </HStack>
 
               <HStack>
@@ -769,17 +763,11 @@ export default function CarCertificateForm({ route }) {
                         onChangeText={onChange}
                         errorText={errors.local?.message}
                         isDisabled={isViewing}
-                        setWidth="320px"
+                        setWidth="350px"
                       />
                     )}
                   ></Controller>
                 </Box>
-                <ModalText
-                  onSelect={setValue}
-                  fieldName={`image.${index}.imageDescription`}
-                  fieldHeader="Sugestões de Descrição"
-                  fieldArray={ModalImageDescription}
-                />
               </HStack>
 
               <Box px={5}>

@@ -4,6 +4,7 @@ import eloSplash from '../../assets/elo-splash-screen.png';
 import badge from '../../assets/icons/badge.png';
 import document from '../../assets/icons/document.png';
 import car from '../../assets/icons/car.png';
+import cargo from '../../assets/icons/cargo.png';
 import yatch from '../../assets/icons/yatch.png';
 import dataAnalytics from '../../assets/icons/data-analytics.png';
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
@@ -76,15 +77,23 @@ export default function HomePage({ navigation }) {
           <HomeButton
             navigation={navigation}
             image={car}
-            imageSize={25}
+            imageSize={28}
             title="Carro"
             textColor="#e7781c"
-            route="newCarCertificateForm"
+            route="home"
             width={200}
             backgroundColor="#d6d6d6"
             imageColor="#e7781c"
           />
         </HStack>
+        <HomeButton
+          navigation={navigation}
+          image={cargo}
+          imageSize={30}
+          fontSize="lg"
+          title="Relatório Diário de Carga"
+          route="newCarCertificateForm"
+        />
         <HomeButton
           navigation={navigation}
           image={document}

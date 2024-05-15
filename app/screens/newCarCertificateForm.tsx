@@ -11,10 +11,10 @@ export default function NewCarFormPage({ navigation }) {
   return (
     <ScrollView>
       <VStack flex={1} alignItems="center" justifyContent="center" my={8}>
-        <Heading>Relatório de Carro</Heading>
+        <Heading>Relatório Diário de Carga</Heading>
         <Card
           navigation={navigation}
-          formTitle="Relatório de Carro"
+          formTitle="Relatório de Carga"
           buttonTitle="Novo Formulário"
           icon="file-plus"
           route="carCertificateForm"
@@ -24,7 +24,7 @@ export default function NewCarFormPage({ navigation }) {
           return (
             <FormTable
               item={item}
-              formName="Relatório de Carro"
+              formName="Relatório de Carga"
               navigation={navigation}
               route="carCertificateForm"
               generateFormFunction={generateForm}
