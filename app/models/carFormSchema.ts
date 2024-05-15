@@ -14,15 +14,27 @@ class CarFormSchema extends Realm.Object<CarFormSchema> {
   function: string;
   entryTime: string;
   exitTime: string;
+  turnTime: string;
   breakIn: string;
   breakOut: string;
+  breakTurn: string;
+  morningWeather: string;
+  morningStatus: string;
+  afternoonWeather: string;
+  afternoonStatus: string;
+  nightWeather: string;
+  nightStatus: string;
+  activity: string;
+  certificateDescription: string;
+  containerDescription: string;
+  containerStatus: string;
   static primaryKey: '_id';
   static schema: Realm.ObjectSchema = {
     name: 'CarFormSchema',
     properties: {
       _id: {
         type: 'string',
-        default: () => new Realm.BSON.ObjectID().toString()
+        default: () => new Realm.BSON.ObjectID().toHexString()
       },
       containerNumber: 'string',
       containerType: 'string',
@@ -36,8 +48,20 @@ class CarFormSchema extends Realm.Object<CarFormSchema> {
       function: 'string',
       entryTime: 'string',
       exitTime: 'string',
+      turnTime: 'string',
       breakIn: 'string',
-      breakOut: 'string'
+      breakOut: 'string',
+      breakTurn: 'string',
+      morningWeather: 'string?',
+      morningStatus: 'string?',
+      afternoonWeather: 'string?',
+      afternoonStatus: 'string?',
+      nightWeather: 'string?',
+      nightStatus: 'string?',
+      activity: 'string?',
+      certificateDescription: 'string?',
+      containerDescription: 'string?',
+      containerStatus: 'string?'
     }
   };
 }

@@ -10,9 +10,14 @@ import dateConverter from '../utils/dateConverter';
 
 const useGenerateCarForm = () => {
   const generateForm = async (data) => {
+    const isOvacao = data.activity === 'Ovação';
+    const isDesova = data.activity === 'Desova';
+
     const formData = {
       containerNumber: data.containerNumber,
       formattedDate: dateConverter(data.reportDate),
+      isOvacao: isOvacao,
+      isDesova: isDesova,
       ...data
     };
     const permissions =

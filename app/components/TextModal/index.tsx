@@ -4,14 +4,19 @@ import { FontAwesome } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { UseFormSetValue } from 'react-hook-form';
 
-import { ModalImageDescription } from '../../data/ModalImageDescription';
-
 type ModalTextProps = {
   onSelect: UseFormSetValue<any>;
   fieldName: string;
+  fieldHeader: string;
+  fieldArray: any;
 };
 
-export default function ModalText({ onSelect, fieldName }: ModalTextProps) {
+export default function ModalText({
+  onSelect,
+  fieldName,
+  fieldArray,
+  fieldHeader
+}: ModalTextProps) {
   const [showModal, setShowModal] = useState(false);
   const [select, setSelect] = useState('');
   const handleSelect = (itemValue) => {
@@ -37,7 +42,7 @@ export default function ModalText({ onSelect, fieldName }: ModalTextProps) {
       >
         <Modal.Content maxWidth="350" maxH="212">
           <Modal.CloseButton />
-          <Modal.Header>Sugestões de Descrição</Modal.Header>
+          <Modal.Header>{fieldHeader}</Modal.Header>
           <Modal.Body>
             <Center>
               <Box maxW="300">
@@ -53,7 +58,7 @@ export default function ModalText({ onSelect, fieldName }: ModalTextProps) {
                   mt={1}
                   onValueChange={(itemValue) => handleSelect(itemValue)}
                 >
-                  {ModalImageDescription.map((item, index) => {
+                  {fieldArray.map((item, index) => {
                     return (
                       <Select.Item
                         label={item.label}

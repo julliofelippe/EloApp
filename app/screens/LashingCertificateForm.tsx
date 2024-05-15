@@ -20,6 +20,7 @@ import { useRealm } from '@realm/react';
 import { useEffect } from 'react';
 import { ObjectId } from 'bson';
 
+import { ModalImageDescription } from '../data/ModalImageDescription';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import { LashingFormSchema } from '../models/lashingFormSchema';
@@ -110,7 +111,7 @@ export default function LashingCertificateForm({ route }) {
     reset,
     resetField
   } = useForm<LashingCertificateFormProps>({
-    // resolver: yupResolver(LashingCertificateFormSchema)
+    resolver: yupResolver(LashingCertificateFormSchema)
   });
 
   const { data: dataLashing, mode: modeLashing } = route.params;
@@ -626,6 +627,8 @@ export default function LashingCertificateForm({ route }) {
                 <ModalText
                   onSelect={setValue}
                   fieldName={`image.${index}.imageTitle`}
+                  fieldHeader="Sugestões de Descrição"
+                  fieldArray={ModalImageDescription}
                 />
               </HStack>
 
@@ -650,6 +653,8 @@ export default function LashingCertificateForm({ route }) {
                 <ModalText
                   onSelect={setValue}
                   fieldName={`image.${index}.imageDescription`}
+                  fieldHeader="Sugestões de Descrição"
+                  fieldArray={ModalImageDescription}
                 />
               </HStack>
 

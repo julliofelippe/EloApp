@@ -15,6 +15,9 @@ const useGenerateLashingForm = () => {
       formattedDate: dateConverter(data.date),
       ...data
     };
+
+    console.log('image:', formData.image);
+
     const permissions =
       await StorageAccessFramework.requestDirectoryPermissionsAsync();
     if (!permissions.granted) {
@@ -34,7 +37,13 @@ const useGenerateLashingForm = () => {
         linebreaks: true
       });
 
-      doc.render(formData);
+      doc.render({
+        image: formData.image.map(({ imageTitle, imageDescription }) => ({
+          imageTitle: imageTitle,
+          imageDescription: imageDescription
+        })),
+        ...formData
+      });
 
       const out = doc.getZip().generate({
         type: 'base64',

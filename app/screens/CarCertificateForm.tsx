@@ -1,18 +1,19 @@
+import React, { useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller, useFieldArray } from 'react-hook-form';
-import React, { useEffect, useState } from 'react';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { useRealm } from '@realm/react';
+import { useForm, Controller } from 'react-hook-form';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { ObjectId } from 'bson';
+import { Box, HStack, Heading, ScrollView, Text, VStack } from 'native-base';
+import { Alert } from 'react-native';
 
-import { Box, Heading, ScrollView, Text, VStack } from 'native-base';
+import { CarFormSchema } from '../models/carFormSchema';
 import Input from '../components/Input';
 import LoadingScreen from '../components/LoadingScreen';
 import InputMasked from '../components/InputMasked';
-import { CarFormSchema } from '../models/carFormSchema';
-import { Alert } from 'react-native';
 import Button from '../components/Button';
+import SelectModal from '../components/SelectModal';
 
 type CarCertificateFormProps = {
   containerNumber: string;
@@ -27,25 +28,60 @@ type CarCertificateFormProps = {
   function: string;
   entryTime: string;
   exitTime: string;
+  turnTime: string;
   breakIn: string;
   breakOut: string;
+  breakTurn: string;
+  morningWeather: string;
+  morningStatus: string;
+  afternoonWeather: string;
+  afternoonStatus: string;
+  nightWeather: string;
+  nightStatus: string;
+  activity: string;
+  certificateDescription: string;
+  containerDescription: string;
+  containerStatus: string;
 };
+
+const modalActivity = [
+  {
+    label: 'Ovação',
+    value: 'Ovação'
+  },
+  {
+    label: 'Desova',
+    value: 'Desova'
+  }
+];
 
 const CarCertificateFormSchema = yup.object({
   containerNumber: yup.string().required('Informe o número do container'),
-  containerType: yup.string().required(''),
-  reportDate: yup.string().required(''),
-  day: yup.string().required(''),
-  clientName: yup.string().required(''),
-  sector: yup.string().required(''),
-  local: yup.string().required(''),
-  contractor: yup.string().required(''),
-  responsible: yup.string().required(''),
-  function: yup.string().required(''),
-  entryTime: yup.string().required(''),
-  exitTime: yup.string().required(''),
-  breakIn: yup.string().required(''),
-  breakOut: yup.string().required('')
+  containerType: yup.string().required('Informe o tipo do container'),
+  reportDate: yup.string().required('Informe a data do relatório'),
+  day: yup.string().required('informe o dia da semana'),
+  clientName: yup.string().required('Informe o nome do cliente'),
+  sector: yup.string().required('Informe o setor'),
+  local: yup.string().required('Informe o local'),
+  contractor: yup.string().required('Informe o nome do contratante'),
+  responsible: yup.string().required('Informe o nome do colaborador'),
+  function: yup.string().required('Informe a função do colaborador'),
+  entryTime: yup.string().required('Informe o horário de entrada'),
+  exitTime: yup.string().required('Informe o horário de saída'),
+  turnTime: yup.string().required('Informe o turno'),
+  breakIn: yup.string().required('Informe o horário de entrada do intervalo'),
+  breakOut: yup.string().required('Informe o horário de saída do intervalo'),
+  breakTurn: yup.string().required('Informe o turno'),
+  morningWeather: yup.string(),
+  morningStatus: yup.string(),
+  afternoonWeather: yup.string(),
+  afternoonStatus: yup.string(),
+  nightWeather: yup.string(),
+  nightStatus: yup.string(),
+  activity: yup.string(),
+  certificateDescription: yup.string(),
+  containerDescription: yup.string(),
+  containerStatus: yup.string()
 });
 
 export default function CarCertificateForm({ route }) {
@@ -59,7 +95,18 @@ export default function CarCertificateForm({ route }) {
     reset,
     resetField
   } = useForm<CarCertificateFormProps>({
-    // resolver: yupResolver(CarCertificateFormSchema)
+    resolver: yupResolver(CarCertificateFormSchema),
+    defaultValues: {
+      morningWeather: '',
+      morningStatus: '',
+      afternoonWeather: '',
+      afternoonStatus: '',
+      nightWeather: '',
+      nightStatus: '',
+      certificateDescription: '',
+      containerDescription: '',
+      containerStatus: ''
+    }
   });
 
   const { data: dataCar, mode: modeCar } = route.params;
@@ -77,7 +124,6 @@ export default function CarCertificateForm({ route }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const isViewing = modeCar === 'view';
-
   const ref = React.useRef(null);
   useScrollToTop(ref);
   const navigation = useNavigation();
@@ -335,6 +381,22 @@ export default function CarCertificateForm({ route }) {
           ></Controller>
         </Box>
         <Box>
+          <Text>Turno</Text>
+          <Controller
+            control={control}
+            name="turnTime"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="B"
+                onChangeText={onChange}
+                errorText={errors.turnTime?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
           <Text>Horário de Entrada do Intervalo</Text>
           <Controller
             control={control}
@@ -361,6 +423,191 @@ export default function CarCertificateForm({ route }) {
                 placeholder="13:00"
                 onChangeText={onChange}
                 errorText={errors.breakOut?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Turno</Text>
+          <Controller
+            control={control}
+            name="breakTurn"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="A"
+                onChangeText={onChange}
+                errorText={errors.breakTurn?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Text fontSize="md" h={10}>
+          Condições Climáticas
+        </Text>
+        <Box>
+          <Text>Tempo (Manhã)</Text>
+          <Controller
+            control={control}
+            name="morningWeather"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="Clima ensolarado"
+                onChangeText={onChange}
+                errorText={errors.morningWeather?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Condição (Manhã)</Text>
+          <Controller
+            control={control}
+            name="morningStatus"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="Clima ensolarado"
+                onChangeText={onChange}
+                errorText={errors.morningStatus?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Tempo (Tarde)</Text>
+          <Controller
+            control={control}
+            name="afternoonWeather"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="Tempo com chuva"
+                onChangeText={onChange}
+                errorText={errors.afternoonWeather?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Condição (Tarde)</Text>
+          <Controller
+            control={control}
+            name="afternoonStatus"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="Tempo com chuva"
+                onChangeText={onChange}
+                errorText={errors.afternoonStatus?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Tempo (Noite)</Text>
+          <Controller
+            control={control}
+            name="nightWeather"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="Tempo limpo"
+                onChangeText={onChange}
+                errorText={errors.afternoonWeather?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Condição (Noite)</Text>
+          <Controller
+            control={control}
+            name="nightStatus"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="Tempo limpo"
+                onChangeText={onChange}
+                errorText={errors.afternoonStatus?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+
+        <Text fontSize="md" h={10}>
+          Descrições do Formulário
+        </Text>
+        <HStack>
+          <Box>
+            <Text>Atividade</Text>
+
+            <Controller
+              control={control}
+              name="activity"
+              render={({ field: { onChange, value } }) => (
+                <SelectModal
+                  onselect={setValue}
+                  fieldName="activity"
+                  fieldArray={modalActivity}
+                  fieldPlaceholder="Atividade"
+                />
+              )}
+            ></Controller>
+          </Box>
+        </HStack>
+        <Box>
+          <Text>Descrição</Text>
+          <Controller
+            control={control}
+            name="certificateDescription"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="Escreva aqui as descrições"
+                onChangeText={onChange}
+                errorText={errors.certificateDescription?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Descrição do Container</Text>
+          <Controller
+            control={control}
+            name="containerDescription"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="Escreva aqui as descrições do container"
+                onChangeText={onChange}
+                errorText={errors.containerDescription?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Status do Container</Text>
+          <Controller
+            control={control}
+            name="containerStatus"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="Escreva aqui o status do container"
+                onChangeText={onChange}
+                errorText={errors.containerStatus?.message}
                 isDisabled={isViewing}
               />
             )}
