@@ -12,4 +12,35 @@ function base64DataURLToArrayBuffer(dataURL) {
   return bytes.buffer;
 }
 
-export default base64DataURLToArrayBuffer;
+function arrayBufferToBase64(buffer) {
+  return Buffer.from(buffer).toString('base64');
+}
+
+function getResizedDimensions(
+  originalWidth,
+  originalHeight,
+  maxWidth,
+  maxHeight
+) {
+  let width = originalWidth;
+  let height = originalHeight;
+
+  // Redimensionar proporcionalmente para caber dentro dos limites máximos
+  if (width > maxWidth) {
+    height = Math.round((height * maxWidth) / width);
+    width = maxWidth;
+  }
+
+  if (height > maxHeight) {
+    width = Math.round((width * maxHeight) / height);
+    height = maxHeight;
+  }
+
+  return [width, height];
+}
+
+export {
+  base64DataURLToArrayBuffer,
+  arrayBufferToBase64,
+  getResizedDimensions
+};

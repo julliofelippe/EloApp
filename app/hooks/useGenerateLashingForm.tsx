@@ -7,7 +7,12 @@ import * as Sharing from 'expo-sharing';
 
 import { base64LashingCertificate } from '../utils/base64-lashing-certificate.js';
 import dateConverter from '../utils/dateConverter';
-import base64DataURLToArrayBuffer from '../utils/base64-to-doc.js';
+import {
+  base64DataURLToArrayBuffer,
+  arrayBufferToBase64,
+  getResizedDimensions
+} from '../utils/base64-to-doc.js';
+import { Image } from 'react-native';
 
 const useGenerateLashingForm = () => {
   const generateForm = async (data) => {
@@ -36,8 +41,27 @@ const useGenerateLashingForm = () => {
         getImage(tag) {
           return base64DataURLToArrayBuffer(tag);
         },
-        getSize() {
-          return [550, 300];
+        getSize(tagValue, _tagName, _meta) {
+          return new Promise((resolve, reject) => {
+            const imageUri = `data:image/png;base64,${arrayBufferToBase64(
+              tagValue
+            )}`;
+            Image.getSize(
+              imageUri,
+              (width, height) => {
+                const [resizedWidth, resizedHeight] = getResizedDimensions(
+                  width,
+                  height,
+                  600,
+                  320
+                );
+                resolve([resizedWidth, resizedHeight]);
+              },
+              (error) => {
+                reject(error);
+              }
+            );
+          });
         }
       };
 
