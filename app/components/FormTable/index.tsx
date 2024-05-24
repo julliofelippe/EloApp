@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
 import { HStack, Box, VStack, Text } from 'native-base';
-import { Feather } from '@expo/vector-icons';
+import { Feather, AntDesign } from '@expo/vector-icons';
 import { TouchableNativeFeedback } from 'react-native';
 import { useRealm } from '@realm/react';
+
+import { fetchPdf } from '../../api/pdf.api';
 
 export default function FormTable({
   item,
@@ -40,6 +42,10 @@ export default function FormTable({
     });
   };
 
+  fetchPdf().then((response) => {
+    console.log(response);
+  });
+
   return (
     <Box
       border="1"
@@ -66,7 +72,7 @@ export default function FormTable({
         <TouchableNativeFeedback onPress={handleView}>
           <Box
             backgroundColor="orange.300"
-            px={6}
+            px={4}
             py={2}
             mx={1}
             borderRadius={200}
@@ -77,7 +83,7 @@ export default function FormTable({
         <TouchableNativeFeedback onPress={handleEdit}>
           <Box
             backgroundColor="orange.300"
-            px={6}
+            px={4}
             py={2}
             mx={1}
             borderRadius={200}
@@ -88,7 +94,7 @@ export default function FormTable({
         <TouchableNativeFeedback onPress={() => generateFormFunction(item)}>
           <Box
             backgroundColor="orange.300"
-            px={6}
+            px={4}
             py={2}
             mx={1}
             borderRadius={200}
@@ -96,10 +102,27 @@ export default function FormTable({
             <Feather name="download" size={22} />
           </Box>
         </TouchableNativeFeedback>
+        <TouchableNativeFeedback
+          onPress={() =>
+            fetchPdf().then((response) => {
+              console.log(response);
+            })
+          }
+        >
+          <Box
+            backgroundColor="orange.300"
+            px={4}
+            py={2}
+            mx={1}
+            borderRadius={200}
+          >
+            <AntDesign name="pdffile1" size={22} />
+          </Box>
+        </TouchableNativeFeedback>
         <TouchableNativeFeedback onPress={() => handleDeleteTask()}>
           <Box
             backgroundColor="orange.300"
-            px={6}
+            px={4}
             py={2}
             mx={1}
             borderRadius={200}

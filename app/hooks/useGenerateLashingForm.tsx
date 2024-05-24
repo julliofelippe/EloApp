@@ -13,6 +13,7 @@ import {
   getResizedDimensions
 } from '../utils/base64-to-doc.js';
 import { Image } from 'react-native';
+import convertBase64DocxToPdf from '../utils/docx-to-pdf.js';
 
 const useGenerateLashingForm = () => {
   const generateForm = async (data) => {
@@ -33,6 +34,10 @@ const useGenerateLashingForm = () => {
     const fileName =
       FileSystem.documentDirectory +
       `Lashing_Certificate_Nº_${formData.certificateNumber}.docx`;
+
+    const fileNamePdf =
+      FileSystem.documentDirectory +
+      `Lashing_Certificate_Nº_${formData.certificateNumber}.pdf`;
 
     try {
       const zip = new PizZip(Buffer.from(base64LashingCertificate, 'base64'));
@@ -90,10 +95,16 @@ const useGenerateLashingForm = () => {
             mimeType:
               'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
           });
+          const source = convertBase64DocxToPdf(base64LashingCertificate);
+          console.log('source', source);
 
-          await FileSystem.writeAsStringAsync(fileName, out, {
-            encoding: FileSystem.EncodingType.Base64
-          });
+          await FileSystem.writeAsStringAsync(
+            fileName,
+            base64LashingCertificate,
+            {
+              encoding: FileSystem.EncodingType.Base64
+            }
+          );
           Sharing.shareAsync(fileName);
 
           console.log(`Documento gerado e salvo: ${fileName}`);
