@@ -32,7 +32,7 @@ export const ScreensArray = [
     route: 'newCarCertificateForm',
     label: 'Relatório Diário de Carga',
     icon: 'file-text',
-    title: '',
+    title: 'Elo',
     display: '',
     component: NewCarFormPage
   },
@@ -40,7 +40,7 @@ export const ScreensArray = [
     route: 'relatorioVistoria',
     label: 'Relatório de Vistoria',
     icon: 'file-text',
-    title: '',
+    title: 'Elo',
     display: '',
     component: RelatorioVistoria
   },
@@ -48,7 +48,7 @@ export const ScreensArray = [
     route: 'ataVistoria',
     label: 'Ata de Vistoria',
     icon: 'file-text',
-    title: '',
+    title: 'Elo',
     display: '',
     component: AtaVistoria
   },
@@ -56,15 +56,15 @@ export const ScreensArray = [
     route: 'newLashingCertificate',
     label: 'Certificado de Lashing',
     icon: 'file-text',
-    title: '',
-    display: 'none',
+    title: 'Elo',
+    display: '',
     component: NewLashingFormPage
   },
   {
     route: 'lashingCertificate',
     label: 'Certificado de Lashing',
     icon: 'file-text',
-    title: '',
+    title: 'Elo',
     display: 'none',
     component: LashingCertificateForm
   },
@@ -72,7 +72,7 @@ export const ScreensArray = [
     route: 'pawnCertificate',
     label: 'Certificado de Peação',
     icon: 'file-text',
-    title: '',
+    title: 'Elo',
     display: 'none',
     component: PawnCertificatePage
   },
@@ -80,7 +80,7 @@ export const ScreensArray = [
     route: 'newCar2CertificateForm',
     label: 'Relatório de Carga',
     icon: 'file-text',
-    title: '',
+    title: 'Elo',
     display: 'none',
     component: NewCarFormPage
   },
@@ -88,7 +88,7 @@ export const ScreensArray = [
     route: 'carCertificateForm',
     label: 'Relatório de Carga',
     icon: 'file-text',
-    title: '',
+    title: 'Elo',
     display: 'none',
     component: CarCertificateForm
   }

@@ -6,7 +6,7 @@ type Props = IButtonProps & {
 
 export default function Button({ text, width, ...rest }: Props) {
   return (
-    <NativeBaseButton w={width} h={12} mb={4} borderRadius={10} {...rest}>
+    <NativeBaseButton w={width} h={12} borderRadius={10} {...rest}>
       <Text fontSize="md" color="white">
         {text}
       </Text>

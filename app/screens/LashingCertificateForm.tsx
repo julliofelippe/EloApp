@@ -685,6 +685,7 @@ export default function LashingCertificateForm({ route }) {
                 : 'Enviar Formulário'
             }
             width="full"
+            mb={8}
             onPress={handleSubmit(handleNewFormRegister)}
           />
         )}

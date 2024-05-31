@@ -16,7 +16,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.AtlasDeviceSdkApp"
+      "package": "com.anonymous.AtlasDeviceSdkApp",
+      "permissions": ["WRITE_EXTERNAL_STORAGE", "READ_EXTERNAL_STORAGE"]
     },
     "extra": {
       "eas": {

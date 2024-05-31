@@ -16,7 +16,7 @@ export default function NewCarFormPage({ navigation }) {
           navigation={navigation}
           formTitle="Relatório de Carga"
           buttonTitle="Novo Formulário"
-          icon="file-plus"
+          icon="file-medical"
           route="carCertificateForm"
         />
         <Divider my="2" backgroundColor="gray.500" />

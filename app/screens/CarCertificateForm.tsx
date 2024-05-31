@@ -787,6 +787,7 @@ export default function CarCertificateForm({ route }) {
               modeCar === 'edit' ? 'Atualizar Formulário' : 'Enviar Formulário'
             }
             width="full"
+            mb={8}
             onPress={handleSubmit(handleNewFormRegister)}
           />
         )}

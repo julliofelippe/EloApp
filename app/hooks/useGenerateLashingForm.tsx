@@ -14,8 +14,10 @@ import {
 } from '../utils/base64-to-doc.js';
 import { Image } from 'react-native';
 import convertBase64DocxToPdf from '../utils/docx-to-pdf.js';
+import useDownloadDocx from './useDownloadDocx';
 
 const useGenerateLashingForm = () => {
+  const { save } = useDownloadDocx();
   const generateForm = async (data) => {
     const ImageModule = require('docxtemplater-image-module-free');
     const formData = {
@@ -24,20 +26,7 @@ const useGenerateLashingForm = () => {
       ...data
     };
 
-    const permissions =
-      await StorageAccessFramework.requestDirectoryPermissionsAsync();
-    if (!permissions.granted) {
-      console.log('Permissão para acessar o diretório não concedida.');
-      return;
-    }
-
-    const fileName =
-      FileSystem.documentDirectory +
-      `Lashing_Certificate_Nº_${formData.certificateNumber}.docx`;
-
-    const fileNamePdf =
-      FileSystem.documentDirectory +
-      `Lashing_Certificate_Nº_${formData.certificateNumber}.pdf`;
+    const fileName = `Lashing_Certificate_Nº_${formData.certificateNumber}`;
 
     try {
       const zip = new PizZip(Buffer.from(base64LashingCertificate, 'base64'));
@@ -95,17 +84,8 @@ const useGenerateLashingForm = () => {
             mimeType:
               'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
           });
-          const source = convertBase64DocxToPdf(base64LashingCertificate);
-          console.log('source', source);
 
-          await FileSystem.writeAsStringAsync(
-            fileName,
-            base64LashingCertificate,
-            {
-              encoding: FileSystem.EncodingType.Base64
-            }
-          );
-          Sharing.shareAsync(fileName);
+          await save(out, fileName, 'docx');
 
           console.log(`Documento gerado e salvo: ${fileName}`);
         });

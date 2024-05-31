@@ -15,7 +15,7 @@ export default function NewLashingFormPage({ navigation }) {
           navigation={navigation}
           formTitle="Certificado de Amarração"
           buttonTitle="Novo Formulário"
-          icon="file-plus"
+          icon="file-medical"
           route="lashingCertificate"
         />
         <Divider my="2" backgroundColor="gray.500" />
@@ -23,7 +23,7 @@ export default function NewLashingFormPage({ navigation }) {
           return (
             <FormTable
               item={item}
-              formName="Formulário Lashing"
+              formName="Relatório"
               navigation={navigation}
               route="lashingCertificate"
               generateFormFunction={generateForm}
