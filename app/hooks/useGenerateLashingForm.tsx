@@ -13,7 +13,6 @@ import {
   getResizedDimensions
 } from '../utils/base64-to-doc.js';
 import { Image } from 'react-native';
-import convertBase64DocxToPdf from '../utils/docx-to-pdf.js';
 import useDownloadDocx from './useDownloadDocx';
 
 const useGenerateLashingForm = () => {
@@ -26,7 +25,7 @@ const useGenerateLashingForm = () => {
       ...data
     };
 
-    const fileName = `Lashing_Certificate_Nº_${formData.certificateNumber}`;
+    const fileName = `Lashing_Certificate_Nº_${formData.certificateNumber}.docx`;
 
     try {
       const zip = new PizZip(Buffer.from(base64LashingCertificate, 'base64'));
