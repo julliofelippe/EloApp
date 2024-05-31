@@ -30,7 +30,7 @@ export const ScreensArray = [
   },
   {
     route: 'newCarCertificateForm',
-    label: 'Relatório Diário de Carga',
+    label: 'Diário de Carga',
     icon: 'file-text',
     title: 'Elo',
     display: '',
@@ -57,7 +57,7 @@ export const ScreensArray = [
     label: 'Certificado de Lashing',
     icon: 'file-text',
     title: 'Elo',
-    display: '',
+    display: 'none',
     component: NewLashingFormPage
   },
   {

@@ -1,5 +1,4 @@
 import * as FileSystem from 'expo-file-system';
-import { StorageAccessFramework } from 'expo-file-system';
 import { Buffer } from 'buffer';
 import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
@@ -13,8 +12,10 @@ import {
   getResizedDimensions
 } from '../utils/base64-to-doc.js';
 import { Image } from 'react-native';
+import useDownloadDocx from './useDownloadDocx';
 
 const useGenerateCarForm = () => {
+  const { save } = useDownloadDocx();
   const generateForm = async (data) => {
     const ImageModule = require('docxtemplater-image-module-free');
     const isOvacao = data.activity === 'Ovação';
@@ -27,16 +28,8 @@ const useGenerateCarForm = () => {
       isDesova: isDesova,
       ...data
     };
-    const permissions =
-      await StorageAccessFramework.requestDirectoryPermissionsAsync();
-    if (!permissions.granted) {
-      console.log('Permissão para acessar o diretório não concedida.');
-      return;
-    }
 
-    const fileName =
-      FileSystem.documentDirectory +
-      `Car_Certificate_Nº_${formData.containerNumber}.docx`;
+    const fileName = `Car_Certificate_Nº_${formData.containerNumber}.docx`;
 
     try {
       const zip = new PizZip(Buffer.from(base64CarCertificate, 'base64'));
@@ -75,7 +68,7 @@ const useGenerateCarForm = () => {
         modules: [new ImageModule(imageOpts)]
       });
 
-      doc
+      return doc
         .resolveData({
           ...formData,
           image: formData.image.map(
@@ -94,20 +87,31 @@ const useGenerateCarForm = () => {
             mimeType:
               'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
           });
-
-          await FileSystem.writeAsStringAsync(fileName, out, {
-            encoding: FileSystem.EncodingType.Base64
-          });
-          Sharing.shareAsync(fileName);
-
-          console.log(`Documento gerado e salvo: ${fileName}`);
+          return {
+            base64: out,
+            fileName: fileName
+          };
         });
     } catch (error) {
       console.error('Erro ao gerar ou salvar o documento:', error);
     }
   };
 
-  return { generateForm };
+  const generateDocx = async (data) => {
+    const form: any = await generateForm(data);
+    await save(form.base64, form.fileName, 'docx');
+
+    console.log(`Documento gerado e salvo: ${form.fileName}`);
+  };
+
+  const generatePdf = async (data) => {
+    const form: any = await generateForm(data);
+    Sharing.shareAsync(FileSystem.documentDirectory + form.fileName);
+
+    console.log(`Documento gerado e salvo: ${form.fileName}`);
+  };
+
+  return { generateDocx, generatePdf };
 };
 
 export default useGenerateCarForm;

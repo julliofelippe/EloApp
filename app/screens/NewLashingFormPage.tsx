@@ -5,7 +5,7 @@ import Card from '../components/Card/Index';
 import useGenerateLashingForm from '../hooks/useGenerateLashingForm';
 
 export default function NewLashingFormPage({ navigation }) {
-  const { generateForm } = useGenerateLashingForm();
+  const { generateDocx, generatePdf } = useGenerateLashingForm();
   const tasks = useQuery('LashingFormSchema');
   return (
     <ScrollView>
@@ -24,9 +24,12 @@ export default function NewLashingFormPage({ navigation }) {
             <FormTable
               item={item}
               formName="Relatório"
+              formNumber={item.certificateNumber}
+              formDate={item.date}
               navigation={navigation}
               route="lashingCertificate"
-              generateFormFunction={generateForm}
+              generateDocxFunction={generateDocx}
+              generatePdfFunction={generatePdf}
             />
           );
         })}

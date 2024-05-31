@@ -574,11 +574,7 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-        <Box px={5}>
-          <Box px={5}>
-            <Button text="Adicionar Imagem" width={48} onPress={addNewImage} />
-          </Box>
-        </Box>
+
         {fields?.map((field, index) => {
           return (
             <Box key={field.id} alignItems="center" my={5}>
@@ -677,6 +673,16 @@ export default function LashingCertificateForm({ route }) {
             </Box>
           );
         })}
+        <Box px={5}>
+          <Box px={5} mb={5}>
+            <Button
+              text="Adicionar Imagem"
+              width={48}
+              backgroundColor="#fb923d"
+              onPress={addNewImage}
+            />
+          </Box>
+        </Box>
         {modeLashing !== 'view' && (
           <Button
             text={
@@ -686,6 +692,7 @@ export default function LashingCertificateForm({ route }) {
             }
             width="full"
             mb={8}
+            backgroundColor="#fb923d"
             onPress={handleSubmit(handleNewFormRegister)}
           />
         )}

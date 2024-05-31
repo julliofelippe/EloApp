@@ -14,7 +14,10 @@ import edit from '../../../assets/icons/edit.png';
 export default function FormTable({
   item,
   formName,
-  generateFormFunction,
+  formNumber,
+  formDate,
+  generateDocxFunction,
+  generatePdfFunction,
   navigation,
   route
 }) {
@@ -62,7 +65,7 @@ export default function FormTable({
             <Feather name="file-text" size={20} color="white" />
           </Box>
           <Text px={2} fontSize="md">
-            {formName} Nº {item.certificateNumber}
+            {formName} Nº {formNumber}
           </Text>
         </HStack>
         <HStack alignItems="center">
@@ -70,7 +73,7 @@ export default function FormTable({
             <FontAwesome5 name="calendar-day" size={18} color="#fb923d" />
           </Box>
           <Text fontSize={12} color="#fb923d" fontWeight="bold">
-            {item.date}
+            {formDate}
           </Text>
         </HStack>
       </HStack>
@@ -96,7 +99,7 @@ export default function FormTable({
           </Box>
         </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback onPress={() => generateFormFunction(item)}>
+        <TouchableNativeFeedback onPress={() => generateDocxFunction(item)}>
           <Box px={1} py={2} mx={1} borderRadius={200}>
             <Image
               source={docx}
@@ -110,7 +113,7 @@ export default function FormTable({
           </Box>
         </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback onPress={() => generateFormFunction(item)}>
+        <TouchableNativeFeedback onPress={() => generatePdfFunction(item)}>
           <Box px={1} py={2} mx={1} borderRadius={200}>
             <Image
               source={pdf}
@@ -124,17 +127,7 @@ export default function FormTable({
           </Box>
         </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback
-          onPress={() =>
-            fetchPdf().then((response) => {
-              Alert.alert(
-                'Piada',
-                response.joke ? response.joke : response.setup
-              );
-              console.log(response);
-            })
-          }
-        >
+        <TouchableNativeFeedback onPress={() => generatePdfFunction(item)}>
           <Box px={1} py={2} mx={1} borderRadius={200}>
             <Image
               source={download}

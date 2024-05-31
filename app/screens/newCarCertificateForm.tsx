@@ -5,9 +5,8 @@ import Card from '../components/Card/Index';
 import useGenerateCarForm from '../hooks/useGenerateCarForm';
 
 export default function NewCarFormPage({ navigation }) {
-  const { generateForm } = useGenerateCarForm();
+  const { generateDocx, generatePdf } = useGenerateCarForm();
   const tasks = useQuery('CarFormSchema');
-  console.log('tasks:', tasks);
   return (
     <ScrollView>
       <VStack flex={1} alignItems="center" justifyContent="center" my={8}>
@@ -24,10 +23,13 @@ export default function NewCarFormPage({ navigation }) {
           return (
             <FormTable
               item={item}
-              formName="Relatório de Carga"
+              formName="Relatório"
+              formNumber={item.containerNumber}
+              formDate={item.reportDate}
               navigation={navigation}
               route="carCertificateForm"
-              generateFormFunction={generateForm}
+              generateDocxFunction={generateDocx}
+              generatePdfFunction={generatePdf}
             />
           );
         })}

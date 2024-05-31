@@ -1,5 +1,4 @@
 import * as FileSystem from 'expo-file-system';
-import { StorageAccessFramework } from 'expo-file-system';
 import { Buffer } from 'buffer';
 import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
@@ -14,6 +13,7 @@ import {
 } from '../utils/base64-to-doc.js';
 import { Image } from 'react-native';
 import useDownloadDocx from './useDownloadDocx';
+import type { FormReturn } from '../types/formType';
 
 const useGenerateLashingForm = () => {
   const { save } = useDownloadDocx();
@@ -64,7 +64,7 @@ const useGenerateLashingForm = () => {
         modules: [new ImageModule(imageOpts)]
       });
 
-      doc
+      return doc
         .resolveData({
           ...formData,
           image: formData.image.map(
@@ -83,17 +83,31 @@ const useGenerateLashingForm = () => {
             mimeType:
               'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
           });
-
-          await save(out, fileName, 'docx');
-
-          console.log(`Documento gerado e salvo: ${fileName}`);
+          return {
+            base64: out,
+            fileName: fileName
+          };
         });
     } catch (error) {
       console.error('Erro ao gerar ou salvar o documento:', error);
     }
   };
 
-  return { generateForm };
+  const generateDocx = async (data) => {
+    const form: any = await generateForm(data);
+    await save(form.base64, form.fileName, 'docx');
+
+    console.log(`Documento gerado e salvo: ${form.fileName}`);
+  };
+
+  const generatePdf = async (data) => {
+    const form: any = await generateForm(data);
+    Sharing.shareAsync(FileSystem.documentDirectory + form.fileName);
+
+    console.log(`Documento gerado e salvo: ${form.fileName}`);
+  };
+
+  return { generateDocx, generatePdf };
 };
 
 export default useGenerateLashingForm;

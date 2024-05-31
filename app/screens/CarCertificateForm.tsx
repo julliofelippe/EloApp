@@ -22,6 +22,7 @@ import { CarFormSchema } from '../models/carFormSchema';
 import Input from '../components/Input';
 import LoadingScreen from '../components/LoadingScreen';
 import InputMasked from '../components/InputMasked';
+import TimeInput from '../components/TimeInput';
 import Button from '../components/Button';
 import SelectModal from '../components/SelectModal';
 import ModalText from '../components/TextModal';
@@ -431,12 +432,14 @@ export default function CarCertificateForm({ route }) {
             control={control}
             name="entryTime"
             render={({ field: { onChange, value } }) => (
-              <Input
-                defaultValue={value}
+              <TimeInput
+                value={value}
                 placeholder="12:00"
                 onChangeText={onChange}
                 errorText={errors.entryTime?.message}
                 isDisabled={isViewing}
+                editable={true}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
@@ -447,12 +450,14 @@ export default function CarCertificateForm({ route }) {
             control={control}
             name="exitTime"
             render={({ field: { onChange, value } }) => (
-              <Input
-                defaultValue={value}
+              <TimeInput
+                value={value}
                 placeholder="17:00"
                 onChangeText={onChange}
                 errorText={errors.exitTime?.message}
                 isDisabled={isViewing}
+                editable={true}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
@@ -479,12 +484,14 @@ export default function CarCertificateForm({ route }) {
             control={control}
             name="breakIn"
             render={({ field: { onChange, value } }) => (
-              <Input
-                defaultValue={value}
+              <TimeInput
+                value={value}
                 placeholder="12:00"
                 onChangeText={onChange}
                 errorText={errors.breakIn?.message}
                 isDisabled={isViewing}
+                editable={true}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
@@ -495,12 +502,14 @@ export default function CarCertificateForm({ route }) {
             control={control}
             name="breakOut"
             render={({ field: { onChange, value } }) => (
-              <Input
-                defaultValue={value}
+              <TimeInput
+                value={value}
                 placeholder="13:00"
                 onChangeText={onChange}
                 errorText={errors.breakOut?.message}
                 isDisabled={isViewing}
+                editable={true}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
@@ -690,11 +699,7 @@ export default function CarCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
-        <Box px={5}>
-          <Box px={5}>
-            <Button text="Adicionar Imagem" width={48} onPress={addNewImage} />
-          </Box>
-        </Box>
+
         {fields?.map((field, index) => {
           return (
             <Box key={field.id} alignItems="center" my={5}>
@@ -781,6 +786,16 @@ export default function CarCertificateForm({ route }) {
             </Box>
           );
         })}
+        <Box px={5}>
+          <Box px={5} mb={5}>
+            <Button
+              text="Adicionar Imagem"
+              width={48}
+              backgroundColor="#fb923d"
+              onPress={addNewImage}
+            />
+          </Box>
+        </Box>
         {modeCar !== 'view' && (
           <Button
             text={
@@ -788,6 +803,7 @@ export default function CarCertificateForm({ route }) {
             }
             width="full"
             mb={8}
+            backgroundColor="#fb923d"
             onPress={handleSubmit(handleNewFormRegister)}
           />
         )}
