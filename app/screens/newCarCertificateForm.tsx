@@ -1,12 +1,23 @@
 import { useQuery } from '@realm/react';
-import { Heading, VStack, ScrollView, Divider } from 'native-base';
+import { Heading, VStack, ScrollView, Divider, HStack } from 'native-base';
+import React from 'react';
+
+import useGenerateCarForm from '../hooks/useGenerateCarForm';
+import SearchBar from '../components/SearchBar';
+import DateInput from '../components/DateInput';
 import FormTable from '../components/FormTable';
 import Card from '../components/Card/Index';
-import useGenerateCarForm from '../hooks/useGenerateCarForm';
 
 export default function NewCarFormPage({ navigation }) {
   const { generateDocx, generatePdf } = useGenerateCarForm();
+  const [searchValue, setSearchValue] = React.useState('');
+  const [dataValue, setDataValue] = React.useState('');
   const tasks = useQuery('CarFormSchema');
+
+  const filteredTasks = tasks
+    .filter((item) => item.containerNumber.includes(searchValue))
+    .filter((item) => item.reportDate.includes(dataValue));
+
   return (
     <ScrollView>
       <VStack flex={1} alignItems="center" justifyContent="center" my={8}>
@@ -19,7 +30,19 @@ export default function NewCarFormPage({ navigation }) {
           route="carCertificateForm"
         />
         <Divider my="2" backgroundColor="gray.500" />
-        {tasks.map((item, index) => {
+        <HStack space={3}>
+          <SearchBar
+            value={searchValue}
+            setValue={setSearchValue}
+            placeholder="Número do Container"
+          />
+          <DateInput
+            value={dataValue}
+            setValue={setDataValue}
+            placeholder="dd/mm/yyyy"
+          />
+        </HStack>
+        {filteredTasks.map((item, index) => {
           return (
             <FormTable
               item={item}
