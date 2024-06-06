@@ -1,6 +1,5 @@
-import { Spinner, View, Container, Box } from 'native-base';
-import { useState } from 'react';
-import { Dimensions, StyleSheet, Animated } from 'react-native';
+import { Spinner, View, Container } from 'native-base';
+import { Dimensions } from 'react-native';
 
 export default function LoadingScreen() {
   const deviceWidth = Dimensions.get('window').width;

@@ -6,6 +6,8 @@ import {
 
 type Props = IInputProps & {
   errorText?: string | null;
+  isInvalid?: boolean;
+  setWidth?: string | null;
 };
 
 export default function Input({

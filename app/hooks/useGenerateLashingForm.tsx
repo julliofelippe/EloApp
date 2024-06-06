@@ -1,8 +1,9 @@
 import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import { Buffer } from 'buffer';
+import { Image } from 'react-native';
 import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
-import * as Sharing from 'expo-sharing';
 
 import { base64LashingCertificate } from '../utils/base64-lashing-certificate.js';
 import dateConverter from '../utils/dateConverter';
@@ -11,9 +12,8 @@ import {
   arrayBufferToBase64,
   getResizedDimensions
 } from '../utils/base64-to-doc.js';
-import { Image } from 'react-native';
+
 import useDownloadDocx from './useDownloadDocx';
-import type { FormReturn } from '../types/formType';
 
 const useGenerateLashingForm = () => {
   const { save } = useDownloadDocx();

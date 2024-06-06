@@ -1,5 +1,3 @@
-import { SafeAreaView } from 'react-native';
-
 import AppNonSync from './AppNonSync';
 
 import { RealmProvider } from '@realm/react';

@@ -1,13 +1,9 @@
-import { Box, HStack, Heading, Image, Text, VStack, View } from 'native-base';
+import { Image, VStack } from 'native-base';
 import eloLogo from '../../assets/logos/elo-logo.png';
 import eloSplash from '../../assets/elo-splash-screen.png';
 import badge from '../../assets/icons/badge.png';
-import document from '../../assets/icons/document.png';
-import car from '../../assets/icons/car.png';
 import cargo from '../../assets/icons/cargo.png';
-import yatch from '../../assets/icons/yatch.png';
-import dataAnalytics from '../../assets/icons/data-analytics.png';
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
+import { Dimensions } from 'react-native';
 import HomeButton from '../components/HomeButton';
 
 export default function HomePage({ navigation }) {
@@ -34,13 +30,13 @@ export default function HomePage({ navigation }) {
           height: window.height,
           zIndex: -2,
           resizeMode: 'cover',
-          bottom: 180
+          bottom: 95
         }}
       />
       <Image
         source={eloLogo}
         alt="Logo Elo Inspeção e Consultoria"
-        marginBottom="150px"
+        marginBottom="30px"
       />
       <VStack
         alignItems="center"
@@ -55,37 +51,9 @@ export default function HomePage({ navigation }) {
           imageSize={30}
           fontSize="lg"
           title="Certificado de Peação"
-          route="home"
+          route="newLashingCertificate"
         />
-        <HStack
-          backgroundColor="#d6d6d6"
-          width="full"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <HomeButton
-            navigation={navigation}
-            image={yatch}
-            imageSize={25}
-            title="Lashing"
-            textColor="#e7781c"
-            route="newLashingCertificate"
-            width={200}
-            backgroundColor="#d6d6d6"
-            imageColor="#e7781c"
-          />
-          <HomeButton
-            navigation={navigation}
-            image={car}
-            imageSize={28}
-            title="Carro"
-            textColor="#e7781c"
-            route="home"
-            width={200}
-            backgroundColor="#d6d6d6"
-            imageColor="#e7781c"
-          />
-        </HStack>
+
         <HomeButton
           navigation={navigation}
           image={cargo}
@@ -93,22 +61,6 @@ export default function HomePage({ navigation }) {
           fontSize="lg"
           title="Relatório Diário de Carga"
           route="newCarCertificateForm"
-        />
-        <HomeButton
-          navigation={navigation}
-          image={document}
-          imageSize={30}
-          fontSize="lg"
-          title="Relatório de Vistoria"
-          route="relatorioVistoria"
-        />
-        <HomeButton
-          navigation={navigation}
-          image={dataAnalytics}
-          imageSize={30}
-          fontSize="lg"
-          title="Ata de Vistoria"
-          route="ataVistoria"
         />
       </VStack>
     </VStack>

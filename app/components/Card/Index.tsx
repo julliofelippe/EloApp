@@ -1,4 +1,4 @@
-import { HStack, Box, VStack, Text } from 'native-base';
+import { HStack, Box } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import Button from '../Button';

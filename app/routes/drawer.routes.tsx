@@ -1,6 +1,5 @@
 import React from 'react';
-import { ScrollView } from 'native-base';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { ScreensArray, constant } from '../constants/constants';
 import Colors from '../constants/Colors';
@@ -51,7 +50,7 @@ export default DrawerNav;
 
 const styles = StyleSheet.create({
   drawerStyle: {
-    width: 240
+    width: 300
   },
   drawerItemStyles: {
     borderRadius: constant.borderRadius

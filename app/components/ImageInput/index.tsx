@@ -9,7 +9,6 @@ type ImageInputProps = {
 };
 
 export default function ImageInput({ imageUrl }: ImageInputProps) {
-  const isSetImage = imageUrl ? imageUrl : imagePlaceholder;
   return (
     <TouchableNativeFeedback>
       <Box w="80%" h="200" alignItems="center" mb={5}>

@@ -34,7 +34,7 @@ export default function NewCarFormPage({ navigation }) {
           <SearchBar
             value={searchValue}
             setValue={setSearchValue}
-            placeholder="Número do Container"
+            placeholder="Número do Relatório"
           />
           <DateInput
             value={dataValue}

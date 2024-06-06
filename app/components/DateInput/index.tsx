@@ -1,4 +1,4 @@
-import { Box, HStack, Input } from 'native-base';
+import { Box, HStack } from 'native-base';
 import { TextInputMask } from 'react-native-masked-text';
 import * as React from 'react';
 import { FontAwesome5 } from '@expo/vector-icons';

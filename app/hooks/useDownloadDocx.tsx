@@ -1,5 +1,4 @@
 import * as FileSystem from 'expo-file-system';
-import * as Sharing from 'expo-sharing';
 
 const useDownloadDocx = () => {
   const save = async (base64, filename, mimetype) => {

@@ -20,9 +20,9 @@ import { useEffect } from 'react';
 import { ObjectId } from 'bson';
 
 import { ModalImageDescription } from '../data/ModalImageDescription';
+import { LashingFormSchema } from '../models/lashingFormSchema';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import { LashingFormSchema } from '../models/lashingFormSchema';
 import ModalText from '../components/TextModal';
 import LoadingScreen from '../components/LoadingScreen';
 import InputMasked from '../components/InputMasked';

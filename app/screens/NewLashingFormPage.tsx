@@ -21,7 +21,7 @@ export default function NewLashingFormPage({ navigation }) {
   return (
     <ScrollView>
       <VStack flex={1} alignItems="center" justifyContent="center" my={8}>
-        <Heading>Certificados de Amarração</Heading>
+        <Heading>Certificados de Peação</Heading>
         <Card
           navigation={navigation}
           formTitle="Certificado de Amarração"

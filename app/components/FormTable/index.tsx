@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { HStack, Box, Text, Image } from 'native-base';
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
-import { Alert, TouchableNativeFeedback } from 'react-native';
+import { TouchableNativeFeedback } from 'react-native';
 import { useRealm } from '@realm/react';
 
 import { fetchPdf } from '../../api/pdf.api';
@@ -55,7 +55,7 @@ export default function FormTable({
       pb="15px"
       pt="10px"
       px="20px"
-      my="5"
+      my="3"
       w={340}
       borderRadius="xl"
     >

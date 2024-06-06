@@ -1,11 +1,9 @@
 import {
   Image,
-  LayoutAnimation,
   Platform,
   StyleSheet,
   Text,
   TouchableNativeFeedback,
-  TouchableOpacity,
   UIManager,
   View
 } from 'react-native';
@@ -20,15 +18,12 @@ import {
   DrawerDescriptorMap,
   DrawerNavigationHelpers
 } from '@react-navigation/drawer/lib/typescript/src/types';
-import { Feather } from '@expo/vector-icons';
-import { HStack } from 'native-base';
 
 import { Container } from '../Container';
-import { Row } from '../Row';
 import { constant, drawerMenu } from '../../constants/constants';
 import Colors from '../../constants/Colors';
 import Styles from '../../common/styles';
-import profilePic from '../../../assets/profile-pic.png';
+import elo from '../../../assets/logos/elo_app.png';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -46,20 +41,20 @@ const CustomDrawer = (props: Props) => {
   return (
     <Container style={{ marginTop: 20 }}>
       {/* profile header */}
-      <TouchableNativeFeedback onPress={() => navigation.navigate('Profile')}>
+      <TouchableNativeFeedback onPress={() => navigation.navigate('home')}>
         <View style={styles.header}>
-          {/* <Image source={profilePic} style={styles.avatar} /> */}
+          <Image source={elo} style={styles.avatar} />
           <View style={styles.textContainer}>
-            <Text style={styles.name}>Usuário</Text>
-            <Text>Administrador</Text>
+            <Text style={styles.name}>Elo - Inspeção e Consultoria</Text>
+            <Text>Dashboard</Text>
           </View>
         </View>
       </TouchableNativeFeedback>
       {/* DrawerList */}
       <DrawerItemList {...props} />
-      <View style={styles.spacer} />
+      {/* <View style={styles.spacer} /> */}
       {/* Menu */}
-      {drawerMenu.map((item, index) => {
+      {/* {drawerMenu.map((item, index) => {
         return (
           <TouchableOpacity
             activeOpacity={0.8}
@@ -112,7 +107,7 @@ const CustomDrawer = (props: Props) => {
             )}
           </TouchableOpacity>
         );
-      })}
+      })} */}
     </Container>
   );
 };
