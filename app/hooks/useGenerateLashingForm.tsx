@@ -64,7 +64,7 @@ const useGenerateLashingForm = () => {
         modules: [new ImageModule(imageOpts)]
       });
 
-      doc.resolveData({
+      await doc.resolveData({
         ...formData,
         image: formData.image.map(
           ({ imageTitle, imageDescription, imageUrl }, index) => ({
