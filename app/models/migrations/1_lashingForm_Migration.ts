@@ -104,6 +104,54 @@ export const migrationFunction: Realm.MigrationCallback = (
       });
     }
   }
+  if (oldRealm.schemaVersion <= 4) {
+    const LashingFormSchema = newRealm.schema.find(
+      (s) => s.name === 'LashingFormSchema'
+    );
+    if (LashingFormSchema) {
+      newRealm.create(
+        'LashingFormSchema',
+        {
+          _id: {
+            type: 'string',
+            default: () => new Realm.BSON.ObjectID().toHexString()
+          },
+          clientName: 'string',
+          certificateNumber: 'string',
+          date: 'string',
+          containersNumber: 'string',
+          reservationNumber: 'string',
+          loadingPort: 'string',
+          destinationPort: 'string',
+          cargoNumber: 'string',
+          cargoDescription: 'string',
+          cargoDimensions: 'string',
+          cargoWeight: 'string',
+          materialNumber: 'string',
+          materialDescription: 'string',
+          materialQuantity: 'string',
+          materialSWL: 'string',
+          cintasQuantity: 'string',
+          companyName: 'string',
+          cargoLateralExcess: 'string',
+          cargoHeightExcess: 'string',
+          cargoDate: 'string',
+          image: { type: 'list', objectType: 'LashingImageList' },
+          newCargo: { type: 'list', objectType: 'LashingCargoList' },
+          newMaterial: { type: 'list', objectType: 'LashingMaterialList' }
+        },
+        true
+      );
+
+      const existingObjects = newRealm.objects('LashingFormSchema');
+
+      existingObjects.forEach((object: any) => {
+        if (!object._id) {
+          object._id = new BSON.ObjectId();
+        }
+      });
+    }
+  }
 
   console.log('Migration completed');
 };

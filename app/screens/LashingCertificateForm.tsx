@@ -5,7 +5,8 @@ import {
   ScrollView,
   Box,
   HStack,
-  Image
+  Image,
+  Divider
 } from 'native-base';
 import React, { useState } from 'react';
 import * as FileSystem from 'expo-file-system';
@@ -33,6 +34,20 @@ type Image = {
   imageDescription: any;
 };
 
+type NewCargo = {
+  newCargoNumber: any;
+  newCargoDescription: any;
+  newCargoDimensions: any;
+  newCargoWeight: any;
+};
+
+type NewMaterial = {
+  newMaterialNumber: any;
+  newMaterialDescription: any;
+  newMaterialQuantity: any;
+  newMaterialSWL: any;
+};
+
 type LashingCertificateFormProps = {
   clientName: string;
   certificateNumber: string;
@@ -55,6 +70,8 @@ type LashingCertificateFormProps = {
   cargoHeightExcess: string;
   cargoDate: string;
   image: Image[];
+  newCargo: NewCargo[];
+  newMaterial: NewMaterial[];
 };
 
 const LashingCertificateFormSchema = yup.object({
@@ -96,6 +113,22 @@ const LashingCertificateFormSchema = yup.object({
       imageTitle: yup.string().required('Informe o título da imagem'),
       imageDescription: yup.string()
     })
+  ),
+  newCargo: yup.array().of(
+    yup.object().shape({
+      newMaterialNumber: yup.string(),
+      newMaterialDescription: yup.string(),
+      newMaterialQuantity: yup.string(),
+      newMaterialSWL: yup.string()
+    })
+  ),
+  newMaterial: yup.array().of(
+    yup.object().shape({
+      newMaterialNumber: yup.string(),
+      newMaterialDescription: yup.string(),
+      newMaterialQuantity: yup.string(),
+      newMaterialSWL: yup.string()
+    })
   )
 });
 
@@ -115,9 +148,31 @@ export default function LashingCertificateForm({ route }) {
 
   const { data: dataLashing, mode: modeLashing } = route.params;
 
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields: imageFields,
+    append: imageAppend,
+    remove: imageRemove
+  } = useFieldArray({
     control,
     name: 'image'
+  });
+
+  const {
+    fields: cargoFields,
+    append: cargoAppend,
+    remove: cargoRemove
+  } = useFieldArray({
+    control,
+    name: 'newCargo'
+  });
+
+  const {
+    fields: materialFields,
+    append: materialAppend,
+    remove: materialRemove
+  } = useFieldArray({
+    control,
+    name: 'newMaterial'
   });
 
   useEffect(() => {
@@ -127,10 +182,32 @@ export default function LashingCertificateForm({ route }) {
         if (key === 'image') {
           const images = dataLashing[key];
           images.map((image) => {
-            append({
+            imageAppend({
               imageTitle: image.imageTitle,
               imageDescription: image.imageDescription,
               imageUrl: image.imageUrl
+            });
+          });
+        }
+        if (key === 'newCargo') {
+          const newCargos = dataLashing[key];
+          newCargos.map((newCargo) => {
+            cargoAppend({
+              newCargoNumber: newCargo.newCargoNumber,
+              newCargoDescription: newCargo.newCargoDescription,
+              newCargoDimensions: newCargo.newCargoDimensions,
+              newCargoWeight: newCargo.newCargoWeight
+            });
+          });
+        }
+        if (key === 'newMaterial') {
+          const newMaterials = dataLashing[key];
+          newMaterials.map((newMaterial) => {
+            materialAppend({
+              newMaterialNumber: newMaterial.newMaterialNumber,
+              newMaterialDescription: newMaterial.newMaterialDescription,
+              newMaterialQuantity: newMaterial.newMaterialQuantity,
+              newMaterialSWL: newMaterial.newMaterialSWL
             });
           });
         }
@@ -138,7 +215,7 @@ export default function LashingCertificateForm({ route }) {
     } else {
       const formData = watch();
       Object.keys(formData).forEach((key) => {
-        if (key === 'image') {
+        if (key === 'image' || key === 'newCargo' || key === 'newMaterial') {
           setValue(key, []);
         } else {
           setValue(key, '');
@@ -207,6 +284,15 @@ export default function LashingCertificateForm({ route }) {
     }
   }
 
+  const addNewCargoDetails = async () => {
+    cargoAppend({
+      newCargoNumber: '',
+      newCargoDescription: '',
+      newCargoDimensions: '',
+      newCargoWeight: ''
+    });
+  };
+
   const addNewImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -221,7 +307,7 @@ export default function LashingCertificateForm({ route }) {
     const base64 = await FileSystem.readAsStringAsync(pickerResult.uri, {
       encoding: 'base64'
     });
-    append({
+    imageAppend({
       imageTitle: '',
       imageDescription: '',
       imageUrl: base64
@@ -269,13 +355,13 @@ export default function LashingCertificateForm({ route }) {
                 onChangeText={onChange}
                 errorText={errors.certificateNumber?.message}
                 isDisabled={isViewing}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
         </Box>
         <Box>
           <Text>Data do Certificado</Text>
-
           <Controller
             control={control}
             name="date"
@@ -305,6 +391,7 @@ export default function LashingCertificateForm({ route }) {
                 onChangeText={onChange}
                 errorText={errors.containersNumber?.message}
                 isDisabled={isViewing}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
@@ -321,13 +408,11 @@ export default function LashingCertificateForm({ route }) {
                 onChangeText={onChange}
                 errorText={errors.reservationNumber?.message}
                 isDisabled={isViewing}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
         </Box>
-        <Text fontSize="md" h={10}>
-          Detalhes do Carregamento
-        </Text>
         <Box>
           <Text>Porto de origem</Text>
           <Controller
@@ -360,6 +445,12 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
+
+        <Divider my="4" backgroundColor="gray.400" />
+
+        <Text fontSize="md" h={10}>
+          Detalhes do Carregamento
+        </Text>
         <Box>
           <Text>Número do carregamento</Text>
           <Controller
@@ -372,6 +463,7 @@ export default function LashingCertificateForm({ route }) {
                 onChangeText={onChange}
                 errorText={errors.cargoNumber?.message}
                 isDisabled={isViewing}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
@@ -424,6 +516,102 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
+        {cargoFields?.map((field, index) => {
+          return (
+            <Box key={index} width="full" alignItems="center">
+              <Text fontSize="md" h={10}>
+                Novo Carregamento
+              </Text>
+              <Box>
+                <Text>Número do carregamento</Text>
+                <Controller
+                  control={control}
+                  name={`newCargo.${index}.newCargoNumber`}
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultValue={value}
+                      placeholder="1"
+                      onChangeText={onChange}
+                      errorText={errors.cargoNumber?.message}
+                      isDisabled={isViewing}
+                      keyboardType="numeric"
+                    />
+                  )}
+                ></Controller>
+              </Box>
+              <Box>
+                <Text>Descrição do carregamento</Text>
+                <Controller
+                  control={control}
+                  name={`newCargo.${index}.newCargoDescription`}
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultValue={value}
+                      placeholder="Barco NX 340"
+                      onChangeText={onChange}
+                      errorText={errors.cargoDescription?.message}
+                      isDisabled={isViewing}
+                    />
+                  )}
+                ></Controller>
+              </Box>
+              <Box>
+                <Text>Dimensões do Carregamento</Text>
+                <Controller
+                  control={control}
+                  name={`newCargo.${index}.newCargoDimensions`}
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultValue={value}
+                      placeholder="10m x 3m x 12m"
+                      onChangeText={onChange}
+                      errorText={errors.cargoDimensions?.message}
+                      isDisabled={isViewing}
+                    />
+                  )}
+                ></Controller>
+              </Box>
+              <Box>
+                <Text>Peso do Carregamento</Text>
+                <Controller
+                  control={control}
+                  name={`newCargo.${index}.newCargoWeight`}
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultValue={value}
+                      placeholder="76,5kg"
+                      onChangeText={onChange}
+                      errorText={errors.cargoWeight?.message}
+                      isDisabled={isViewing}
+                    />
+                  )}
+                ></Controller>
+              </Box>
+              <Box px={5}>
+                <Button
+                  text="Remover Carregamento"
+                  width={280}
+                  mb={5}
+                  backgroundColor="red.500"
+                  onPress={() => cargoRemove(index)}
+                />
+              </Box>
+            </Box>
+          );
+        })}
+        <Box px={5}>
+          <Box px={5} mb={5}>
+            <Button
+              text="Adicionar Carregamento"
+              width={280}
+              backgroundColor="#fb923d"
+              onPress={addNewCargoDetails}
+            />
+          </Box>
+        </Box>
+
+        <Divider my="4" backgroundColor="gray.400" />
+
         <Text fontSize="md" h={10}>
           Detalhes do Material de Amarração
         </Text>
@@ -439,6 +627,7 @@ export default function LashingCertificateForm({ route }) {
                 onChangeText={onChange}
                 errorText={errors.materialNumber?.message}
                 isDisabled={isViewing}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
@@ -471,6 +660,7 @@ export default function LashingCertificateForm({ route }) {
                 onChangeText={onChange}
                 errorText={errors.materialQuantity?.message}
                 isDisabled={isViewing}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
@@ -491,6 +681,103 @@ export default function LashingCertificateForm({ route }) {
             )}
           ></Controller>
         </Box>
+        {materialFields?.map((field, index) => {
+          return (
+            <Box key={index} width="full" alignItems="center">
+              <Text fontSize="md" h={10}>
+                Novo Material de Amarração
+              </Text>
+              <Box>
+                <Text>Número do Material</Text>
+                <Controller
+                  control={control}
+                  name={`newMaterial.${index}.newMaterialNumber`}
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultValue={value}
+                      placeholder="1"
+                      onChangeText={onChange}
+                      errorText={errors.materialNumber?.message}
+                      isDisabled={isViewing}
+                      keyboardType="numeric"
+                    />
+                  )}
+                ></Controller>
+              </Box>
+              <Box>
+                <Text>Descrição do Material</Text>
+                <Controller
+                  control={control}
+                  name={`newMaterial.${index}.newMaterialDescription`}
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultValue={value}
+                      placeholder="Correias de amarração"
+                      onChangeText={onChange}
+                      errorText={errors.materialDescription?.message}
+                      isDisabled={isViewing}
+                    />
+                  )}
+                ></Controller>
+              </Box>
+              <Box>
+                <Text>Quantidade do Material</Text>
+                <Controller
+                  control={control}
+                  name={`newMaterial.${index}.newMaterialQuantity`}
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultValue={value}
+                      placeholder="12"
+                      onChangeText={onChange}
+                      errorText={errors.materialQuantity?.message}
+                      isDisabled={isViewing}
+                      keyboardType="numeric"
+                    />
+                  )}
+                ></Controller>
+              </Box>
+              <Box>
+                <Text>Carga de trabalho segura do Material</Text>
+                <Controller
+                  control={control}
+                  name={`newMaterial.${index}.newMaterialSWL`}
+                  render={({ field: { onChange, value } }) => (
+                    <Input
+                      defaultValue={value}
+                      placeholder="6 t (para cada correia de amarração)"
+                      onChangeText={onChange}
+                      errorText={errors.materialSWL?.message}
+                      isDisabled={isViewing}
+                    />
+                  )}
+                ></Controller>
+              </Box>
+              <Box px={5}>
+                <Button
+                  text="Remover Material de Amarração"
+                  width={280}
+                  mb={5}
+                  backgroundColor="red.500"
+                  onPress={() => materialRemove(index)}
+                />
+              </Box>
+            </Box>
+          );
+        })}
+        <Box px={5}>
+          <Box px={5} mb={5}>
+            <Button
+              text="Adicionar Material de Amarração"
+              width={280}
+              backgroundColor="#fb923d"
+              onPress={materialAppend}
+            />
+          </Box>
+        </Box>
+
+        <Divider my="4" backgroundColor="gray.400" />
+
         <Text fontSize="md" h={10}>
           Observações do Carregamento
         </Text>
@@ -506,6 +793,7 @@ export default function LashingCertificateForm({ route }) {
                 onChangeText={onChange}
                 errorText={errors.cintasQuantity?.message}
                 isDisabled={isViewing}
+                keyboardType="numeric"
               />
             )}
           ></Controller>
@@ -575,7 +863,7 @@ export default function LashingCertificateForm({ route }) {
           ></Controller>
         </Box>
 
-        {fields?.map((field, index) => {
+        {imageFields?.map((field, index) => {
           return (
             <Box key={field.id} alignItems="center" my={5}>
               <TouchableNativeFeedback>
@@ -665,9 +953,9 @@ export default function LashingCertificateForm({ route }) {
               <Box px={5}>
                 <Button
                   text="Remover Imagem"
-                  width={48}
+                  width={280}
                   backgroundColor="red.500"
-                  onPress={() => remove(index)}
+                  onPress={() => imageRemove(index)}
                 />
               </Box>
             </Box>
@@ -677,7 +965,7 @@ export default function LashingCertificateForm({ route }) {
           <Box px={5} mb={5}>
             <Button
               text="Adicionar Imagem"
-              width={48}
+              width={280}
               backgroundColor="#fb923d"
               onPress={addNewImage}
             />
