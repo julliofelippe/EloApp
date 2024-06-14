@@ -5,7 +5,7 @@ import { Image } from 'react-native';
 import PizZip from 'pizzip';
 import Docxtemplater from 'docxtemplater';
 
-import { base64LashingCertificate } from '../utils/base64-lashing-certificate.js';
+import { base64LashingCertificate } from '../utils/base64-lashing-certificate';
 import dateConverter from '../utils/dateConverter';
 import {
   base64DataURLToArrayBuffer,
@@ -64,60 +64,56 @@ const useGenerateLashingForm = () => {
         modules: [new ImageModule(imageOpts)]
       });
 
-      await doc.resolveData({
-        ...formData,
-        image: formData.image.map(
-          ({ imageTitle, imageDescription, imageUrl }, index) => ({
-            imageTitle: imageTitle,
-            imageDescription: imageDescription,
-            imageUrl: imageUrl,
-            imageIndex: `Photo ${index + 1}`
-          })
-        ),
-        newCargo: formData.newCargo.map(
-          (
-            {
+      return doc
+        .resolveData({
+          ...formData,
+          image: formData.image.map(
+            ({ imageTitle, imageDescription, imageUrl }, index) => ({
+              imageTitle: imageTitle,
+              imageDescription: imageDescription,
+              imageUrl: imageUrl,
+              imageIndex: `Photo ${index + 1}`
+            })
+          ),
+          newCargo: formData.newCargo.map(
+            ({
               newCargoNumber,
               newCargoDescription,
               newCargoDimensions,
               newCargoWeight
-            },
-            index
-          ) => ({
-            newCargoNumber: newCargoNumber,
-            newCargoDescription: newCargoDescription,
-            newCargoDimensions: newCargoDimensions,
-            newCargoWeight: newCargoWeight
-          })
-        ),
-        newMaterial: formData.newMaterial.map(
-          (
-            {
+            }) => ({
+              newCargoNumber: newCargoNumber,
+              newCargoDescription: newCargoDescription,
+              newCargoDimensions: newCargoDimensions,
+              newCargoWeight: newCargoWeight
+            })
+          ),
+          newMaterial: formData.newMaterial.map(
+            ({
               newMaterialNumber,
               newMaterialDescription,
               newMaterialQuantity,
               newMaterialSWL
-            },
-            index
-          ) => ({
-            newMaterialNumber: newMaterialNumber,
-            newMaterialDescription: newMaterialDescription,
-            newMaterialQuantity: newMaterialQuantity,
-            newMaterialSWL: newMaterialSWL
-          })
-        )
-      });
-
-      doc.render();
-      const out = doc.getZip().generate({
-        type: 'base64',
-        mimeType:
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-      });
-      return {
-        base64: out,
-        fileName: fileName
-      };
+            }) => ({
+              newMaterialNumber: newMaterialNumber,
+              newMaterialDescription: newMaterialDescription,
+              newMaterialQuantity: newMaterialQuantity,
+              newMaterialSWL: newMaterialSWL
+            })
+          )
+        })
+        .then(async () => {
+          doc.render();
+          const out = doc.getZip().generate({
+            type: 'base64',
+            mimeType:
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+          });
+          return {
+            base64: out,
+            fileName: fileName
+          };
+        });
     } catch (error) {
       console.error('Erro ao gerar ou salvar o documento:', error);
     }
@@ -125,7 +121,6 @@ const useGenerateLashingForm = () => {
 
   const generateDocx = async (data) => {
     const form: any = await generateForm(data);
-
     await save(form.base64, form.fileName, 'docx');
 
     console.log(`Documento gerado e salvo: ${form.fileName}`);
