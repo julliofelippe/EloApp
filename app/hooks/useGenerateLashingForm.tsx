@@ -111,7 +111,8 @@ const useGenerateLashingForm = () => {
           });
           return {
             base64: out,
-            fileName: fileName
+            fileName: fileName,
+            shareUrl: FileSystem.documentDirectory + fileName
           };
         });
     } catch (error) {
@@ -121,14 +122,18 @@ const useGenerateLashingForm = () => {
 
   const generateDocx = async (data) => {
     const form: any = await generateForm(data);
-    await save(form.base64, form.fileName, 'docx');
+    // await save(form.base64, form.fileName, 'docx');
 
     console.log(`Documento gerado e salvo: ${form.fileName}`);
   };
 
   const generatePdf = async (data) => {
     const form: any = await generateForm(data);
-    Sharing.shareAsync(FileSystem.documentDirectory + form.fileName);
+    await FileSystem.writeAsStringAsync(form.shareUrl, form.base64, {
+      encoding: FileSystem.EncodingType.Base64
+    });
+    Sharing.shareAsync(form.shareUrl);
+    console.log(form.shareUrl);
 
     console.log(`Documento gerado e salvo: ${form.fileName}`);
   };
