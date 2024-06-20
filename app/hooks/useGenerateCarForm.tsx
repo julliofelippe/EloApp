@@ -13,9 +13,11 @@ import {
   getResizedDimensions
 } from '../utils/base64-to-doc.js';
 import useDownloadDocx from './useDownloadDocx';
+import { useConverterDocxToPdf } from './useConverterDocxToPdf';
 
 const useGenerateCarForm = () => {
   const { save } = useDownloadDocx();
+  const { convertDocxToPdf } = useConverterDocxToPdf();
   const generateForm = async (data) => {
     const ImageModule = require('docxtemplater-image-module-free');
     const isOvacao = data.activity === 'Ovação';
@@ -106,7 +108,15 @@ const useGenerateCarForm = () => {
 
   const generatePdf = async (data) => {
     const form: any = await generateForm(data);
-    Sharing.shareAsync(FileSystem.documentDirectory + form.fileName);
+    const docxData = form.base64;
+    const pdfName = `${form.fileName.split('.')[0]}.pdf`;
+    const pdfBase64 = await convertDocxToPdf(docxData);
+    await FileSystem.writeAsStringAsync(pdfName, pdfBase64, {
+      encoding: FileSystem.EncodingType.Base64
+    });
+    const fileUri = `${FileSystem.documentDirectory}${pdfName}`;
+    
+    Sharing.shareAsync(fileUri);
 
     console.log(`Documento gerado e salvo: ${form.fileName}`);
   };

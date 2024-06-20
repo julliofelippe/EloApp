@@ -14,9 +14,11 @@ import {
 } from '../utils/base64-to-doc.js';
 
 import useDownloadDocx from './useDownloadDocx';
+import { useConverterDocxToPdf } from './useConverterDocxToPdf';
 
 const useGenerateLashingForm = () => {
   const { save } = useDownloadDocx();
+  const { convertDocxToPdf } = useConverterDocxToPdf();
   const generateForm = async (data) => {
     const ImageModule = require('docxtemplater-image-module-free');
     const formData = {
@@ -112,7 +114,6 @@ const useGenerateLashingForm = () => {
           return {
             base64: out,
             fileName: fileName,
-            shareUrl: FileSystem.documentDirectory + fileName
           };
         });
     } catch (error) {
@@ -122,18 +123,22 @@ const useGenerateLashingForm = () => {
 
   const generateDocx = async (data) => {
     const form: any = await generateForm(data);
-    // await save(form.base64, form.fileName, 'docx');
+    await save(form.base64, form.fileName, 'docx');
 
     console.log(`Documento gerado e salvo: ${form.fileName}`);
   };
 
   const generatePdf = async (data) => {
     const form: any = await generateForm(data);
-    await FileSystem.writeAsStringAsync(form.shareUrl, form.base64, {
+    const docxData = form.base64;
+    const pdfName = `${form.fileName.split('.')[0]}.pdf`;
+    const pdfBase64 = await convertDocxToPdf(docxData);
+    await FileSystem.writeAsStringAsync(pdfName, pdfBase64, {
       encoding: FileSystem.EncodingType.Base64
     });
-    Sharing.shareAsync(form.shareUrl);
-    console.log(form.shareUrl);
+    const fileUri = `${FileSystem.documentDirectory}${pdfName}`;
+    
+    Sharing.shareAsync(fileUri);
 
     console.log(`Documento gerado e salvo: ${form.fileName}`);
   };
