@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useLoading } from '../context/LoadingContext';
+import { Alert } from 'react-native';
 
 export const useConverterDocxToPdf = () => {
   const { startLoading, stopLoading } = useLoading();
@@ -12,9 +13,11 @@ export const useConverterDocxToPdf = () => {
           base64Docx: docxBase64
         }
       );
+      Alert.alert('Sucesso', 'Documento Gerado com Sucesso');
       return pdf.data.base64Pdf;
     } catch (error) {
       console.error('Erro ao gerar ou salvar o documento:', error.message);
+      Alert.alert('Erro ao gerar ou salvar o documento:', error.message);
     } finally {
       stopLoading();
     }
