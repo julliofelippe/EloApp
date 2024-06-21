@@ -109,14 +109,15 @@ const useGenerateCarForm = () => {
   const generatePdf = async (data) => {
     const form: any = await generateForm(data);
     const docxData = form.base64;
-    const pdfName = `${form.fileName.split('.')[0]}.pdf`;
+    const pdfName = `${FileSystem.documentDirectory}${
+      form.fileName.split('.')[0]
+    }.pdf`;
     const pdfBase64 = await convertDocxToPdf(docxData);
     await FileSystem.writeAsStringAsync(pdfName, pdfBase64, {
       encoding: FileSystem.EncodingType.Base64
     });
-    const fileUri = `${FileSystem.documentDirectory}${pdfName}`;
-    
-    Sharing.shareAsync(fileUri);
+
+    Sharing.shareAsync(pdfName);
 
     console.log(`Documento gerado e salvo: ${form.fileName}`);
   };
