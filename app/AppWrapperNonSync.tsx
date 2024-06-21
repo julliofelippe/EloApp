@@ -4,6 +4,7 @@ import { RealmProvider } from '@realm/react';
 import { schemas } from './models';
 import { NativeBaseProvider } from 'native-base';
 import { migrationFunction } from './models/migrations/1_lashingForm_Migration';
+import { LoadingProvider } from './context/LoadingContext';
 
 export const AppWrapperNonSync = () => {
   // If sync is disabled, setup the app without any sync functionality and return early
@@ -14,7 +15,9 @@ export const AppWrapperNonSync = () => {
         schemaVersion={4}
         onMigration={migrationFunction}
       >
-        <AppNonSync />
+        <LoadingProvider>
+          <AppNonSync />
+        </LoadingProvider>
       </RealmProvider>
     </NativeBaseProvider>
   );

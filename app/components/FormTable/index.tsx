@@ -1,10 +1,15 @@
 import { useCallback } from 'react';
 import { HStack, Box, Text, Image } from 'native-base';
-import { Feather, FontAwesome5 } from '@expo/vector-icons';
+import {
+  Feather,
+  FontAwesome5,
+  MaterialCommunityIcons
+} from '@expo/vector-icons';
 import { TouchableNativeFeedback } from 'react-native';
 import { useRealm } from '@realm/react';
 
 import { fetchPdf } from '../../api/pdf.api';
+import { useLoading } from '../../context/LoadingContext';
 import docx from '../../../assets/icons/doc.png';
 import pdf from '../../../assets/icons/pdf.png';
 import download from '../../../assets/icons/download.png';
@@ -22,6 +27,8 @@ export default function FormTable({
   route
 }) {
   const realm = useRealm();
+
+  const { isLoading } = useLoading();
 
   const handleDeleteTask = useCallback((): void => {
     try {
@@ -115,15 +122,23 @@ export default function FormTable({
 
         <TouchableNativeFeedback onPress={() => generatePdfFunction(item)}>
           <Box px={1} py={2} mx={1} borderRadius={200}>
-            <Image
-              source={pdf}
-              alt="Badge"
-              style={{
-                width: 40,
-                height: 40,
-                tintColor: 'white'
-              }}
-            />
+            {isLoading ? (
+              <MaterialCommunityIcons
+                name="progress-download"
+                size={40}
+                color="white"
+              />
+            ) : (
+              <Image
+                source={pdf}
+                alt="Badge"
+                style={{
+                  width: 40,
+                  height: 40,
+                  tintColor: 'white'
+                }}
+              />
+            )}
           </Box>
         </TouchableNativeFeedback>
 
