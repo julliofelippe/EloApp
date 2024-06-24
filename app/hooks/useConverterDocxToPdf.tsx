@@ -13,7 +13,7 @@ export const useConverterDocxToPdf = () => {
           base64Docx: docxBase64
         }
       );
-      Alert.alert('Sucesso', 'Documento Gerado com Sucesso');
+      Alert.alert('Sucesso!', 'Documento gerado com sucesso.');
       return pdf.data.base64Pdf;
     } catch (error) {
       console.error('Erro ao gerar ou salvar o documento:', error.message);
