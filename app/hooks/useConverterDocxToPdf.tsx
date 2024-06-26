@@ -11,6 +11,11 @@ export const useConverterDocxToPdf = () => {
         'http://conv-env.eba-pifvpcaj.us-east-1.elasticbeanstalk.com/docx-to-pdf',
         {
           base64Docx: docxBase64
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
         }
       );
       Alert.alert('Sucesso!', 'Documento gerado com sucesso.');
