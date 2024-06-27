@@ -143,7 +143,19 @@ const useGenerateLashingForm = () => {
     console.log(`Documento gerado e salvo: ${form.fileName}`);
   };
 
-  return { generateDocx, generatePdf };
+  const downloadPdf = async (data) => {
+    const form: any = await generateForm(data);
+    const docxData = form.base64;
+    const pdfName = `${FileSystem.documentDirectory}${
+      form.fileName.split('.')[0]
+    }.pdf`;
+    const pdfBase64 = await convertDocxToPdf(docxData);
+    await save(pdfBase64, pdfName, 'pdf');
+
+    console.log(`Documento gerado e salvo: ${pdfName}`);
+  };
+
+  return { generateDocx, generatePdf, downloadPdf };
 };
 
 export default useGenerateLashingForm;

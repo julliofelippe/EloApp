@@ -9,7 +9,7 @@ import SearchBar from '../components/SearchBar';
 import DateInput from '../components/DateInput';
 
 export default function NewLashingFormPage({ navigation }) {
-  const { generateDocx, generatePdf } = useGenerateLashingForm();
+  const { generateDocx, generatePdf, downloadPdf } = useGenerateLashingForm();
   const [searchValue, setSearchValue] = React.useState('');
   const [dataValue, setDataValue] = React.useState('');
   const tasks = useQuery('LashingFormSchema');
@@ -53,6 +53,7 @@ export default function NewLashingFormPage({ navigation }) {
               route="lashingCertificate"
               generateDocxFunction={generateDocx}
               generatePdfFunction={generatePdf}
+              downloadPdfFunction={downloadPdf}
             />
           );
         })}
