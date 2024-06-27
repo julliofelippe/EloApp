@@ -8,7 +8,7 @@ export const useConverterDocxToPdf = () => {
     try {
       startLoading();
       const pdf = await axios.post(
-        'http://conv-env.eba-pifvpcaj.us-east-1.elasticbeanstalk.com/docx-to-pdf',
+        'https://convert.ikone.global/docx-to-pdf',
         {
           base64Docx: docxBase64
         },
