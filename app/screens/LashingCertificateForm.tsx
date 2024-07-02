@@ -19,6 +19,7 @@ import { Alert, TouchableNativeFeedback } from 'react-native';
 import { useRealm } from '@realm/react';
 import { useEffect } from 'react';
 import { ObjectId } from 'bson';
+import { Entypo } from '@expo/vector-icons';
 
 import { ModalImageDescription } from '../data/ModalImageDescription';
 import { LashingFormSchema } from '../models/lashingFormSchema';
@@ -301,6 +302,26 @@ export default function LashingCertificateForm({ route }) {
       return;
     }
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
+    if (pickerResult.canceled === true) {
+      return;
+    }
+    const base64 = await FileSystem.readAsStringAsync(pickerResult.uri, {
+      encoding: 'base64'
+    });
+    imageAppend({
+      imageTitle: '',
+      imageDescription: '',
+      imageUrl: base64
+    });
+  };
+
+  const addNewCameraImage = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (permissionResult.granted === false) {
+      alert('Você precisa conceder permissão para acessar suas fotos!');
+      return;
+    }
+    const pickerResult = await ImagePicker.launchCameraAsync();
     if (pickerResult.canceled === true) {
       return;
     }
@@ -961,16 +982,21 @@ export default function LashingCertificateForm({ route }) {
             </Box>
           );
         })}
-        <Box px={5}>
-          <Box px={5} mb={5}>
+        <HStack alignItems="center" justifyContent="center" px={5} mb={5}>
+          <Box px={5}>
             <Button
               text="Adicionar Imagem"
-              width={280}
+              width={230}
               backgroundColor="#fb923d"
               onPress={addNewImage}
             />
           </Box>
-        </Box>
+          <TouchableNativeFeedback onPress={addNewCameraImage}>
+            <Box backgroundColor="#fb923d" borderRadius={10} p={3}>
+              <Entypo name="camera" size={24} color="white" />
+            </Box>
+          </TouchableNativeFeedback>
+        </HStack>
         {modeLashing !== 'view' && (
           <Button
             text={

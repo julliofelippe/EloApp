@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { ObjectId } from 'bson';
+import { Entypo } from '@expo/vector-icons';
 import {
   Box,
   HStack,
@@ -248,6 +249,26 @@ export default function CarCertificateForm({ route }) {
       imageUrl: base64,
       imageTitle: '',
       imageDescription: ''
+    });
+  };
+
+  const addNewCameraImage = async () => {
+    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    if (permissionResult.granted === false) {
+      alert('Você precisa conceder permissão para acessar suas fotos!');
+      return;
+    }
+    const pickerResult = await ImagePicker.launchCameraAsync();
+    if (pickerResult.canceled === true) {
+      return;
+    }
+    const base64 = await FileSystem.readAsStringAsync(pickerResult.uri, {
+      encoding: 'base64'
+    });
+    append({
+      imageTitle: '',
+      imageDescription: '',
+      imageUrl: base64
     });
   };
 
@@ -778,7 +799,7 @@ export default function CarCertificateForm({ route }) {
               <Box px={5}>
                 <Button
                   text="Remover Imagem"
-                  width={48}
+                  width={280}
                   backgroundColor="red.500"
                   onPress={() => remove(index)}
                 />
@@ -786,16 +807,21 @@ export default function CarCertificateForm({ route }) {
             </Box>
           );
         })}
-        <Box px={5}>
-          <Box px={5} mb={5}>
+        <HStack alignItems="center" justifyContent="center" px={5} mb={5}>
+          <Box px={5}>
             <Button
               text="Adicionar Imagem"
-              width={48}
+              width={230}
               backgroundColor="#fb923d"
               onPress={addNewImage}
             />
           </Box>
-        </Box>
+          <TouchableNativeFeedback onPress={addNewCameraImage}>
+            <Box backgroundColor="#fb923d" borderRadius={10} p={3}>
+              <Entypo name="camera" size={24} color="white" />
+            </Box>
+          </TouchableNativeFeedback>
+        </HStack>
         {modeCar !== 'view' && (
           <Button
             text={
