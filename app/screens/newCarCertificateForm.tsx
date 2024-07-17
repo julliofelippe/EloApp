@@ -9,7 +9,8 @@ import FormTable from '../components/FormTable';
 import Card from '../components/Card/Index';
 
 export default function NewCarFormPage({ navigation }) {
-  const { generateDocx, generatePdf, downloadPdf } = useGenerateCarForm();
+  const { sharingDocx, sharingPdf, downloadPdf, downloadDocx } =
+    useGenerateCarForm();
   const [searchValue, setSearchValue] = React.useState('');
   const [dataValue, setDataValue] = React.useState('');
   const tasks = useQuery('CarFormSchema');
@@ -51,9 +52,10 @@ export default function NewCarFormPage({ navigation }) {
               formDate={item.reportDate}
               navigation={navigation}
               route="carCertificateForm"
-              generateDocxFunction={generateDocx}
-              generatePdfFunction={generatePdf}
+              generateDocxFunction={sharingDocx}
+              generatePdfFunction={sharingPdf}
               downloadPdfFunction={downloadPdf}
+              downloadDoxcFunction={downloadDocx}
             />
           );
         })}

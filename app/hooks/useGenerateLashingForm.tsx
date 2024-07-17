@@ -121,14 +121,22 @@ const useGenerateLashingForm = () => {
     }
   };
 
-  const generateDocx = async (data) => {
+  const sharingDocx = async (data) => {
     const form: any = await generateForm(data);
-    await save(form.base64, form.fileName, 'docx');
+    // await save(form.base64, form.fileName, 'docx');
+    const doxcData = form.base64;
+    const doxcName = `${FileSystem.documentDirectory}${
+      form.fileName.split('.')[0]
+    }.docx`;
+    await FileSystem.writeAsStringAsync(doxcName, doxcData, {
+      encoding: FileSystem.EncodingType.Base64
+    });
+    Sharing.shareAsync(doxcName);
 
     console.log(`Documento gerado e salvo: ${form.fileName}`);
   };
 
-  const generatePdf = async (data) => {
+  const sharingPdf = async (data) => {
     const form: any = await generateForm(data);
     const docxData = form.base64;
     const pdfName = `${FileSystem.documentDirectory}${
@@ -155,7 +163,14 @@ const useGenerateLashingForm = () => {
     console.log(`Documento gerado e salvo: ${pdfName}`);
   };
 
-  return { generateDocx, generatePdf, downloadPdf };
+  const downloadDocx = async (data) => {
+    const form: any = await generateForm(data);
+    await save(form.base64, form.fileName, 'docx');
+
+    console.log(`Documento gerado e salvo: ${form.fileName}`);
+  };
+
+  return { sharingDocx, sharingPdf, downloadPdf, downloadDocx };
 };
 
 export default useGenerateLashingForm;

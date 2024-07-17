@@ -24,6 +24,7 @@ export default function FormTable({
   generateDocxFunction,
   generatePdfFunction,
   downloadPdfFunction,
+  downloadDoxcFunction,
   navigation,
   route
 }) {
@@ -143,7 +144,7 @@ export default function FormTable({
           </Box>
         </TouchableNativeFeedback>
 
-        <TouchableNativeFeedback onPress={() => downloadPdfFunction(item)}>
+        <TouchableNativeFeedback onPress={() => downloadDoxcFunction(item)}>
           <Box px={1} py={2} mx={1} borderRadius={200}>
             <Image
               source={download}
