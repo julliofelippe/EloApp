@@ -8,11 +8,11 @@ import {
 import { TouchableNativeFeedback } from 'react-native';
 import { useRealm } from '@realm/react';
 
-import { fetchPdf } from '../../api/pdf.api';
 import { useLoading } from '../../context/LoadingContext';
 import docx from '../../../assets/icons/doc.png';
 import pdf from '../../../assets/icons/pdf.png';
-import download from '../../../assets/icons/download.png';
+import downloadPdf from '../../../assets/icons/downloadPdf.png';
+import downloadDocx from '../../../assets/icons/downloadDocx.png';
 import trash from '../../../assets/icons/trash.png';
 import edit from '../../../assets/icons/edit.png';
 
@@ -100,8 +100,8 @@ export default function FormTable({
               source={edit}
               alt="Badge"
               style={{
-                width: 41,
-                height: 41,
+                width: 33,
+                height: 33,
                 tintColor: 'white'
               }}
             />
@@ -110,15 +110,23 @@ export default function FormTable({
 
         <TouchableNativeFeedback onPress={() => generateDocxFunction(item)}>
           <Box px={1} py={2} mx={1} borderRadius={200}>
-            <Image
-              source={docx}
-              alt="Badge"
-              style={{
-                width: 40,
-                height: 40,
-                tintColor: 'white'
-              }}
-            />
+            {isLoading ? (
+              <MaterialCommunityIcons
+                name="progress-download"
+                size={30}
+                color="white"
+              />
+            ) : (
+              <Image
+                source={docx}
+                alt="Badge"
+                style={{
+                  width: 32,
+                  height: 32,
+                  tintColor: 'white'
+                }}
+              />
+            )}
           </Box>
         </TouchableNativeFeedback>
 
@@ -127,7 +135,7 @@ export default function FormTable({
             {isLoading ? (
               <MaterialCommunityIcons
                 name="progress-download"
-                size={40}
+                size={30}
                 color="white"
               />
             ) : (
@@ -135,8 +143,8 @@ export default function FormTable({
                 source={pdf}
                 alt="Badge"
                 style={{
-                  width: 40,
-                  height: 40,
+                  width: 32,
+                  height: 32,
                   tintColor: 'white'
                 }}
               />
@@ -146,25 +154,56 @@ export default function FormTable({
 
         <TouchableNativeFeedback onPress={() => downloadDoxcFunction(item)}>
           <Box px={1} py={2} mx={1} borderRadius={200}>
-            <Image
-              source={download}
-              alt="Badge"
-              style={{
-                width: 40,
-                height: 40,
-                tintColor: 'white'
-              }}
-            />
+            {isLoading ? (
+              <MaterialCommunityIcons
+                name="progress-download"
+                size={30}
+                color="white"
+              />
+            ) : (
+              <Image
+                source={downloadDocx}
+                alt="Badge"
+                style={{
+                  width: 32,
+                  height: 32,
+                  tintColor: 'white'
+                }}
+              />
+            )}
           </Box>
         </TouchableNativeFeedback>
+
+        <TouchableNativeFeedback onPress={() => downloadPdfFunction(item)}>
+          <Box px={1} py={2} mx={1} borderRadius={200}>
+            {isLoading ? (
+              <MaterialCommunityIcons
+                name="progress-download"
+                size={30}
+                color="white"
+              />
+            ) : (
+              <Image
+                source={downloadPdf}
+                alt="Badge"
+                style={{
+                  width: 32,
+                  height: 32,
+                  tintColor: 'white'
+                }}
+              />
+            )}
+          </Box>
+        </TouchableNativeFeedback>
+
         <TouchableNativeFeedback onPress={() => handleDeleteTask()}>
           <Box px={1} py={2} mx={1} borderRadius={200}>
             <Image
               source={trash}
               alt="Badge"
               style={{
-                width: 40,
-                height: 40,
+                width: 32,
+                height: 32,
                 tintColor: '#302f31'
               }}
             />
