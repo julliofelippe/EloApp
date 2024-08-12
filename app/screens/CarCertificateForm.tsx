@@ -76,6 +76,21 @@ const modalActivity = [
   }
 ];
 
+const modalTurn = [
+  {
+    label: 'Turno A',
+    value: 'Turno A'
+  },
+  {
+    label: 'Turno B',
+    value: 'Turno B'
+  },
+  {
+    label: 'Turno C',
+    value: 'Turno C'
+  }
+];
+
 const CarCertificateFormSchema = yup.object({
   containerNumber: yup.string().required('Informe o número do container'),
   containerType: yup.string().required('Informe o tipo do container'),
@@ -171,6 +186,24 @@ export default function CarCertificateForm({ route }) {
       });
     }
   }, [modeCar, dataCar]);
+
+  const selectedTurn = watch('turnTime');
+  const selectedBreackTurn = watch('breakTurn');
+
+  useEffect(() => {
+    if (selectedTurn) {
+      if (selectedTurn === 'Turno A') {
+        setValue('entryTime', '07:00');
+        setValue('exitTime', '15:20');
+      } else if (selectedTurn === 'Turno B') {
+        setValue('entryTime', '15:00');
+        setValue('exitTime', '23:20');
+      } else if (selectedTurn === 'Turno C') {
+        setValue('entryTime', '23:00');
+        setValue('exitTime', '07:20');
+      }
+    }
+  }, [selectedTurn, selectedBreackTurn, setValue]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -448,6 +481,21 @@ export default function CarCertificateForm({ route }) {
           ></Controller>
         </Box>
         <Box>
+          <Text>Turno</Text>
+          <Controller
+            control={control}
+            name="turnTime"
+            render={({ field: { onChange, value } }) => (
+              <SelectModal
+                onselect={setValue}
+                fieldName="turnTime"
+                fieldArray={modalTurn}
+                fieldPlaceholder="Selecione o Turno"
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
           <Text>Horário de Entrada</Text>
           <Controller
             control={control}
@@ -484,16 +532,16 @@ export default function CarCertificateForm({ route }) {
           ></Controller>
         </Box>
         <Box>
-          <Text>Turno</Text>
+          <Text>Turno de Intervalo</Text>
           <Controller
             control={control}
-            name="turnTime"
+            name="breakTurn"
             render={({ field: { onChange, value } }) => (
               <Input
                 defaultValue={value}
-                placeholder="B"
+                placeholder="Informe o Turno"
                 onChangeText={onChange}
-                errorText={errors.turnTime?.message}
+                errorText={errors.function?.message}
                 isDisabled={isViewing}
               />
             )}
@@ -531,22 +579,6 @@ export default function CarCertificateForm({ route }) {
                 isDisabled={isViewing}
                 editable={true}
                 keyboardType="numeric"
-              />
-            )}
-          ></Controller>
-        </Box>
-        <Box>
-          <Text>Turno</Text>
-          <Controller
-            control={control}
-            name="breakTurn"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                defaultValue={value}
-                placeholder="A"
-                onChangeText={onChange}
-                errorText={errors.breakTurn?.message}
-                isDisabled={isViewing}
               />
             )}
           ></Controller>
