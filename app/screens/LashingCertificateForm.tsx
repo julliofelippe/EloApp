@@ -1000,33 +1000,17 @@ export default function LashingCertificateForm({ route }) {
             </Box>
           </TouchableNativeFeedback>
         </HStack>
-        {isLoading ? (
-          <Box
+        {modeLashing === 'edit' ? (
+          <Button
+            text="Atualizar Formulário"
             width="full"
-            alignItems="center"
-            justifyContent="center"
-            flexDirection="row"
-            height={12}
             mb={8}
             backgroundColor="#fb923d"
-            borderRadius={13}
-          >
-            <MaterialCommunityIcons
-              name="progress-download"
-              size={30}
-              color="white"
-            />
-            <Text color="white" fontSize={16} px={2}>
-              Carregando...
-            </Text>
-          </Box>
+            onPress={handleSubmit(handleNewFormRegister)}
+          />
         ) : (
           <Button
-            text={
-              modeLashing === 'edit'
-                ? 'Atualizar Formulário'
-                : 'Enviar Formulário'
-            }
+            text="Enviar Formulário"
             width="full"
             mb={8}
             backgroundColor="#fb923d"
