@@ -251,7 +251,7 @@ export default function LashingCertificateForm({ route }) {
 
   async function handleNewFormRegister() {
     try {
-      if (modeLashing === 'edit' || modeLashing === 'view') {
+      if (modeLashing === 'edit') {
         const objectId = new ObjectId(dataLashing._id);
         let item = realm
           .objects(LashingFormSchema)
