@@ -206,9 +206,7 @@ export default function CarCertificateForm({ route }) {
     }
   }, [selectedTurn, selectedBreackTurn, setValue]);
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  const isLoadingContext = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
 
   const isViewing = modeCar === 'view';
   const ref = React.useRef(null);
@@ -857,17 +855,31 @@ export default function CarCertificateForm({ route }) {
             </Box>
           </TouchableNativeFeedback>
         </HStack>
-        {modeCar === 'edit' ? (
-          <Button
-            text="Atualizar Formulário"
+        {isLoading ? (
+          <Box
             width="full"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="row"
+            height={12}
             mb={8}
-            backgroundColor="#fb923d"
-            onPress={handleSubmit(handleNewFormRegister)}
-          />
+            backgroundColor="#F1DEC6"
+            borderRadius={13}
+          >
+            <MaterialCommunityIcons
+              name="progress-download"
+              size={30}
+              color="white"
+            />
+            <Text color="white" fontSize={16} px={2}>
+              Carregando...
+            </Text>
+          </Box>
         ) : (
           <Button
-            text="Enviar Formulário"
+            text={
+              modeCar === 'edit' ? 'Atualizar Formulário' : 'Enviar Formulário'
+            }
             width="full"
             mb={8}
             backgroundColor="#fb923d"

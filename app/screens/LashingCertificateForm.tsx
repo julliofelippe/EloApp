@@ -226,9 +226,7 @@ export default function LashingCertificateForm({ route }) {
     }
   }, [modeLashing, dataLashing]);
 
-  const [isLoading, setIsLoading] = useState(false);
-
-  const isLoadingContext = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
 
   const isViewing = modeLashing === 'view';
 
@@ -1000,17 +998,33 @@ export default function LashingCertificateForm({ route }) {
             </Box>
           </TouchableNativeFeedback>
         </HStack>
-        {modeLashing === 'edit' ? (
-          <Button
-            text="Atualizar Formulário"
+        {isLoading ? (
+          <Box
             width="full"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="row"
+            height={12}
             mb={8}
-            backgroundColor="#fb923d"
-            onPress={handleSubmit(handleNewFormRegister)}
-          />
+            backgroundColor="#F1DEC6"
+            borderRadius={13}
+          >
+            <MaterialCommunityIcons
+              name="progress-download"
+              size={30}
+              color="white"
+            />
+            <Text color="white" fontSize={16} px={2}>
+              Carregando...
+            </Text>
+          </Box>
         ) : (
           <Button
-            text="Enviar Formulário"
+            text={
+              modeLashing === 'edit'
+                ? 'Atualizar Formulário'
+                : 'Enviar Formulário'
+            }
             width="full"
             mb={8}
             backgroundColor="#fb923d"
