@@ -137,13 +137,10 @@ const LashingCertificateFormSchema = yup.object({
 export default function LashingCertificateForm({ route }) {
   const {
     control,
-    handleSubmit,
     formState: { errors },
     getValues,
     setValue,
-    watch,
-    reset,
-    resetField
+    watch
   } = useForm<LashingCertificateFormProps>({
     resolver: yupResolver(LashingCertificateFormSchema)
   });
@@ -1028,7 +1025,7 @@ export default function LashingCertificateForm({ route }) {
             width="full"
             mb={8}
             backgroundColor="#fb923d"
-            onPress={handleSubmit(handleNewFormRegister)}
+            onPress={handleNewFormRegister}
           />
         )}
       </VStack>

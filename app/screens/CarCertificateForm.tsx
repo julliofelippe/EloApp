@@ -131,13 +131,10 @@ const CarCertificateFormSchema = yup.object({
 export default function CarCertificateForm({ route }) {
   const {
     control,
-    handleSubmit,
     formState: { errors },
     getValues,
     setValue,
-    watch,
-    reset,
-    resetField
+    watch
   } = useForm<CarCertificateFormProps>({
     resolver: yupResolver(CarCertificateFormSchema),
     defaultValues: {
@@ -228,7 +225,7 @@ export default function CarCertificateForm({ route }) {
 
   async function handleNewFormRegister() {
     try {
-      if (modeCar === 'edit' || modeCar === 'view') {
+      if (modeCar === 'edit') {
         const objectId = new ObjectId(dataCar._id);
         let item = realm
           .objects(CarFormSchema)
@@ -883,7 +880,7 @@ export default function CarCertificateForm({ route }) {
             width="full"
             mb={8}
             backgroundColor="#fb923d"
-            onPress={handleSubmit(handleNewFormRegister)}
+            onPress={handleNewFormRegister}
           />
         )}
       </VStack>
