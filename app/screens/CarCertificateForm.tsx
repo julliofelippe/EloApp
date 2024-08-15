@@ -7,7 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import { ObjectId } from 'bson';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   Box,
   HStack,
@@ -28,6 +28,7 @@ import Button from '../components/Button';
 import SelectModal from '../components/SelectModal';
 import ModalText from '../components/TextModal';
 import { ModalImageDescription } from '../data/ModalImageDescription';
+import { useLoading } from '../context/LoadingContext';
 
 type Image = {
   imageUrl: any;
@@ -206,6 +207,8 @@ export default function CarCertificateForm({ route }) {
   }, [selectedTurn, selectedBreackTurn, setValue]);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const isLoadingContext = useLoading();
 
   const isViewing = modeCar === 'view';
   const ref = React.useRef(null);
@@ -854,7 +857,27 @@ export default function CarCertificateForm({ route }) {
             </Box>
           </TouchableNativeFeedback>
         </HStack>
-        {modeCar !== 'view' && (
+        {isLoading ? (
+          <Box
+            width="full"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="row"
+            height={12}
+            mb={8}
+            backgroundColor="#fb923d"
+            borderRadius={13}
+          >
+            <MaterialCommunityIcons
+              name="progress-download"
+              size={30}
+              color="white"
+            />
+            <Text color="white" fontSize={16} px={2}>
+              Carregando...
+            </Text>
+          </Box>
+        ) : (
           <Button
             text={
               modeCar === 'edit' ? 'Atualizar Formulário' : 'Enviar Formulário'

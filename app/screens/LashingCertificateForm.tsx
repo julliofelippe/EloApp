@@ -19,7 +19,7 @@ import { Alert, TouchableNativeFeedback } from 'react-native';
 import { useRealm } from '@realm/react';
 import { useEffect } from 'react';
 import { ObjectId } from 'bson';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { ModalImageDescription } from '../data/ModalImageDescription';
 import { LashingFormSchema } from '../models/lashingFormSchema';
@@ -28,6 +28,7 @@ import Button from '../components/Button';
 import ModalText from '../components/TextModal';
 import LoadingScreen from '../components/LoadingScreen';
 import InputMasked from '../components/InputMasked';
+import { useLoading } from '../context/LoadingContext';
 
 type Image = {
   imageUrl: any;
@@ -226,6 +227,8 @@ export default function LashingCertificateForm({ route }) {
   }, [modeLashing, dataLashing]);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const isLoadingContext = useLoading();
 
   const isViewing = modeLashing === 'view';
 
@@ -997,7 +1000,27 @@ export default function LashingCertificateForm({ route }) {
             </Box>
           </TouchableNativeFeedback>
         </HStack>
-        {modeLashing !== 'view' && (
+        {isLoading ? (
+          <Box
+            width="full"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="row"
+            height={12}
+            mb={8}
+            backgroundColor="#fb923d"
+            borderRadius={13}
+          >
+            <MaterialCommunityIcons
+              name="progress-download"
+              size={30}
+              color="white"
+            />
+            <Text color="white" fontSize={16} px={2}>
+              Carregando...
+            </Text>
+          </Box>
+        ) : (
           <Button
             text={
               modeLashing === 'edit'
