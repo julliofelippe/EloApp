@@ -137,10 +137,13 @@ const LashingCertificateFormSchema = yup.object({
 export default function LashingCertificateForm({ route }) {
   const {
     control,
+    handleSubmit,
     formState: { errors },
     getValues,
     setValue,
-    watch
+    watch,
+    reset,
+    resetField
   } = useForm<LashingCertificateFormProps>({
     resolver: yupResolver(LashingCertificateFormSchema)
   });

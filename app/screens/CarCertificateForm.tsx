@@ -131,10 +131,13 @@ const CarCertificateFormSchema = yup.object({
 export default function CarCertificateForm({ route }) {
   const {
     control,
+    handleSubmit,
     formState: { errors },
     getValues,
     setValue,
-    watch
+    watch,
+    reset,
+    resetField
   } = useForm<CarCertificateFormProps>({
     resolver: yupResolver(CarCertificateFormSchema),
     defaultValues: {
