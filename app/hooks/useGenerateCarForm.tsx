@@ -51,8 +51,8 @@ const useGenerateCarForm = () => {
                 const [resizedWidth, resizedHeight] = getResizedDimensions(
                   width,
                   height,
-                  600,
-                  320
+                  320,
+                  340
                 );
                 resolve([resizedWidth, resizedHeight]);
               },
