@@ -152,6 +152,65 @@ export const migrationFunction: Realm.MigrationCallback = (
       });
     }
   }
+  if (oldRealm.schemaVersion <= 5) {
+    console.log('executing version 5');
+    const CarFormSchema = newRealm.schema.find(
+      (s) => s.name === 'CarFormSchema'
+    );
+    if (CarFormSchema) {
+      newRealm.create(
+        'CarFormSchema',
+        {
+          _id: {
+            type: 'string',
+            default: () => new Realm.BSON.ObjectID().toHexString()
+          },
+          containerNumber: 'string',
+          containerType: 'string',
+          reportDate: 'string',
+          day: 'string',
+          clientName: 'string',
+          sector: 'string',
+          local: 'string',
+          contractor: 'string',
+          responsible: 'string',
+          function: 'string',
+          entryTime: 'string',
+          exitTime: 'string',
+          turnTime: 'string',
+          breakIn: 'string',
+          breakOut: 'string',
+          breakTurn: 'string',
+          morningWeather: 'string?',
+          morningStatus: 'string?',
+          afternoonWeather: 'string?',
+          afternoonStatus: 'string?',
+          nightWeather: 'string?',
+          nightStatus: 'string?',
+          activity: 'string?',
+          certificateDescription: 'string?',
+          containerDescription: 'string?',
+          containerStatus: 'string?',
+          descriptionInitHour: 'string?',
+          descriptionFinalHour: 'string?',
+          palletsQuantity: 'string?',
+          avaria: 'string?',
+          auxiliarQuantity: 'string?',
+          forkliftQuantity: 'string?',
+          descriptionObservation: 'string?',
+          image: { type: 'list', objectType: 'LashingImageList' }
+        },
+        true
+      );
+      const existingObjects = newRealm.objects('CarFormSchema');
+
+      existingObjects.forEach((object: any) => {
+        if (!object._id) {
+          object._id = new BSON.ObjectId().toHexString();
+        }
+      });
+    }
+  }
 
   console.log('Migration completed');
 };

@@ -12,7 +12,7 @@ export const AppWrapperNonSync = () => {
     <NativeBaseProvider>
       <RealmProvider
         schema={schemas}
-        schemaVersion={4}
+        schemaVersion={5}
         onMigration={migrationFunction}
       >
         <LoadingProvider>

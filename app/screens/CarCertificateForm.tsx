@@ -21,6 +21,7 @@ import { Alert, TouchableNativeFeedback } from 'react-native';
 
 import { CarFormSchema } from '../models/carFormSchema';
 import Input from '../components/Input';
+import TextArea from '../components/TextArea';
 import LoadingScreen from '../components/LoadingScreen';
 import InputMasked from '../components/InputMasked';
 import TimeInput from '../components/TimeInput';
@@ -63,6 +64,13 @@ type CarCertificateFormProps = {
   certificateDescription: string;
   containerDescription: string;
   containerStatus: string;
+  descriptionInitHour: string;
+  descriptionFinalHour: string;
+  palletsQuantity: string;
+  avaria: string;
+  auxiliarQuantity: string;
+  forkliftQuantity: string;
+  descriptionObservation: string;
   image: Image[];
 };
 
@@ -74,6 +82,17 @@ const modalActivity = [
   {
     label: 'Desova',
     value: 'Desova'
+  }
+];
+
+const modalDescription = [
+  {
+    label: 'Com avarias',
+    value: 'Com avarias'
+  },
+  {
+    label: 'Sem avarias',
+    value: 'Sem avarias'
   }
 ];
 
@@ -119,6 +138,13 @@ const CarCertificateFormSchema = yup.object({
   certificateDescription: yup.string().notRequired(),
   containerDescription: yup.string().notRequired(),
   containerStatus: yup.string().notRequired(),
+  descriptionInitHour: yup.string().notRequired(),
+  descriptionFinalHour: yup.string().notRequired(),
+  palletsQuantity: yup.string().notRequired(),
+  avaria: yup.string().notRequired(),
+  auxiliarQuantity: yup.string().notRequired(),
+  forkliftQuantity: yup.string().notRequired(),
+  descriptionObservation: yup.string().notRequired(),
   image: yup.array().of(
     yup.object().shape({
       imageUrl: yup.string().notRequired(),
@@ -151,6 +177,13 @@ export default function CarCertificateForm({ route }) {
       certificateDescription: '',
       containerDescription: '',
       containerStatus: '',
+      descriptionInitHour: '',
+      descriptionFinalHour: '',
+      palletsQuantity: '',
+      avaria: '',
+      auxiliarQuantity: '',
+      forkliftQuantity: '',
+      descriptionObservation: '',
       image: []
     }
   });
@@ -706,22 +739,6 @@ export default function CarCertificateForm({ route }) {
           </Box>
         </HStack>
         <Box>
-          <Text>Descrição</Text>
-          <Controller
-            control={control}
-            name="certificateDescription"
-            render={({ field: { onChange, value } }) => (
-              <Input
-                defaultValue={value}
-                placeholder="Escreva aqui as descrições"
-                onChangeText={onChange}
-                errorText={errors.certificateDescription?.message}
-                isDisabled={isViewing}
-              />
-            )}
-          ></Controller>
-        </Box>
-        <Box>
           <Text>Descrição do Container</Text>
           <Controller
             control={control}
@@ -748,6 +765,129 @@ export default function CarCertificateForm({ route }) {
                 placeholder="Escreva aqui o status do container"
                 onChangeText={onChange}
                 errorText={errors.containerStatus?.message}
+                isDisabled={isViewing}
+              />
+            )}
+          ></Controller>
+        </Box>
+
+        <Text fontSize="md" h={10}>
+          Tópicos da Descrição
+        </Text>
+
+        <Box>
+          <Text>Hora Inicial</Text>
+          <Controller
+            control={control}
+            name="descriptionInitHour"
+            render={({ field: { onChange, value } }) => (
+              <TimeInput
+                value={value}
+                placeholder="12:00"
+                onChangeText={onChange}
+                errorText={errors.descriptionInitHour?.message}
+                isDisabled={isViewing}
+                editable={true}
+                keyboardType="numeric"
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Hora Final</Text>
+          <Controller
+            control={control}
+            name="descriptionFinalHour"
+            render={({ field: { onChange, value } }) => (
+              <TimeInput
+                value={value}
+                placeholder="12:00"
+                onChangeText={onChange}
+                errorText={errors.descriptionFinalHour?.message}
+                isDisabled={isViewing}
+                editable={true}
+                keyboardType="numeric"
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Pallets</Text>
+          <Controller
+            control={control}
+            name="palletsQuantity"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="3"
+                onChangeText={onChange}
+                errorText={errors.palletsQuantity?.message}
+                isDisabled={isViewing}
+                keyboardType="numeric"
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Avarias</Text>
+          <Controller
+            control={control}
+            name="activity"
+            render={({ field: { onChange, value } }) => (
+              <SelectModal
+                onselect={setValue}
+                fieldName="activity"
+                fieldArray={modalDescription}
+                fieldPlaceholder="Selecione a opção"
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Auxiliares</Text>
+          <Controller
+            control={control}
+            name="auxiliarQuantity"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="2"
+                onChangeText={onChange}
+                errorText={errors.auxiliarQuantity?.message}
+                isDisabled={isViewing}
+                keyboardType="numeric"
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Empilhadores</Text>
+          <Controller
+            control={control}
+            name="forkliftQuantity"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                defaultValue={value}
+                placeholder="4"
+                onChangeText={onChange}
+                errorText={errors.forkliftQuantity?.message}
+                isDisabled={isViewing}
+                keyboardType="numeric"
+              />
+            )}
+          ></Controller>
+        </Box>
+        <Box>
+          <Text>Observações</Text>
+          <Controller
+            control={control}
+            name="descriptionObservation"
+            render={({ field: { onChange, value } }) => (
+              <TextArea
+                defaultValue={value}
+                placeholder="Observações da descrição"
+                onChangeText={onChange}
+                errorText={errors.descriptionObservation?.message}
                 isDisabled={isViewing}
               />
             )}

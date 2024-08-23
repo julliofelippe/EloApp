@@ -22,12 +22,16 @@ const useGenerateCarForm = () => {
     const ImageModule = require('docxtemplater-image-module-free');
     const isOvacao = data.activity === 'Ovação';
     const isDesova = data.activity === 'Desova';
+    const isComAvaria = data.avaria === 'Com avarias';
+    const isSemAvaria = data.avaria === 'Sem avarias';
 
     const formData = {
       containerNumber: data.containerNumber,
       formattedDate: dateConverter(data.reportDate),
       isOvacao: isOvacao,
       isDesova: isDesova,
+      isComAvaria: isComAvaria,
+      isSemAvaria: isSemAvaria,
       ...data
     };
 

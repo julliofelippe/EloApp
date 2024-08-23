@@ -42,6 +42,13 @@ class CarFormSchema extends Realm.Object<CarFormSchema> {
   certificateDescription: string;
   containerDescription: string;
   containerStatus: string;
+  descriptionInitHour: string;
+  descriptionFinalHour: string;
+  palletsQuantity: string;
+  avaria: string;
+  auxiliarQuantity: string;
+  forkliftQuantity: string;
+  descriptionObservation: string;
   image: Realm.List<CarImageList>;
   static primaryKey: '_id';
   static schema: Realm.ObjectSchema = {
@@ -77,6 +84,13 @@ class CarFormSchema extends Realm.Object<CarFormSchema> {
       certificateDescription: 'string?',
       containerDescription: 'string?',
       containerStatus: 'string?',
+      descriptionInitHour: 'string?',
+      descriptionFinalHour: 'string?',
+      palletsQuantity: 'string?',
+      avaria: 'string?',
+      auxiliarQuantity: 'string?',
+      forkliftQuantity: 'string?',
+      descriptionObservation: 'string?',
       image: { type: 'list', objectType: 'LashingImageList' }
     }
   };
