@@ -74,17 +74,32 @@ const useGenerateCarForm = () => {
         modules: [new ImageModule(imageOpts)]
       });
 
+      const getInterleavedOrder = (items) => {
+        const result = [];
+        const length = items.length;
+        const middle = Math.ceil(length / 2);
+
+        for (let i = 0; i < middle; i++) {
+          if (i < middle) result.push(items[i]); // Primeira coluna
+          if (i + middle < length) result.push(items[i + middle]); // Segunda coluna
+        }
+
+        return result;
+      };
+
+      // Aplicando a nova ordem intercalada
+      const interleavedPhotos = getInterleavedOrder(formData.image);
+
+      // Atualizando com a numeração sequencial correta
+      const updatedPhotos = interleavedPhotos.map((photo, index) => ({
+        ...photo,
+        imageIndex: `Photo ${index + 1}`
+      }));
+
       return doc
         .resolveData({
           ...formData,
-          image: formData.image.map(
-            ({ imageTitle, imageDescription, imageUrl }, index) => ({
-              imageTitle: imageTitle,
-              imageDescription: imageDescription,
-              imageUrl: imageUrl,
-              imageIndex: `Photo ${index + 1}`
-            })
-          )
+          image: updatedPhotos
         })
         .then(async () => {
           doc.render();
