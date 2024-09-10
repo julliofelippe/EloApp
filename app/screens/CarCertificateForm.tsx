@@ -832,11 +832,11 @@ export default function CarCertificateForm({ route }) {
           <Text>Avarias</Text>
           <Controller
             control={control}
-            name="activity"
+            name="avaria"
             render={({ field: { onChange, value } }) => (
               <SelectModal
                 onselect={setValue}
-                fieldName="activity"
+                fieldName="avaria"
                 fieldArray={modalDescription}
                 fieldPlaceholder="Selecione a opção"
               />
