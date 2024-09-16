@@ -154,9 +154,7 @@ const useGenerateLashingForm = () => {
   const downloadPdf = async (data) => {
     const form: any = await generateForm(data);
     const docxData = form.base64;
-    const pdfName = `${FileSystem.documentDirectory}${
-      form.fileName.split('.')[0]
-    }.pdf`;
+    const pdfName = `${form.fileName.split('.')[0]}.pdf`;
     const pdfBase64 = await convertDocxToPdf(docxData);
     await save(pdfBase64, pdfName, 'pdf');
 
