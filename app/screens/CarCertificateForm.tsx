@@ -82,6 +82,14 @@ const modalActivity = [
   {
     label: 'Desova',
     value: 'Desova'
+  },
+  {
+    label: 'Cross Dock',
+    value: 'Cross Dock'
+  },
+  {
+    label: 'Outros',
+    value: 'Outros'
   }
 ];
 
@@ -812,7 +820,7 @@ export default function CarCertificateForm({ route }) {
           ></Controller>
         </Box>
         <Box>
-          <Text>Pallets</Text>
+          <Text>Pallets / Volumes</Text>
           <Controller
             control={control}
             name="palletsQuantity"
