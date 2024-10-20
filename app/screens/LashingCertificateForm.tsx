@@ -8,7 +8,7 @@ import {
   Image,
   Divider
 } from 'native-base';
-import React, { useState } from 'react';
+import React from 'react';
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';
 import { useForm, Controller, useFieldArray } from 'react-hook-form';
@@ -269,6 +269,7 @@ export default function LashingCertificateForm({ route }) {
         setIsLoading(true);
         realm.write(() => {
           return realm.create(LashingFormSchema, {
+            _id: new Realm.BSON.ObjectID().toHexString(),
             ...values
           });
         });

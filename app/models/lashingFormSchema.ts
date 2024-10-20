@@ -77,7 +77,7 @@ class LashingFormSchema extends Realm.Object<LashingFormSchema> {
     properties: {
       _id: {
         type: 'string',
-        default: () => new Realm.BSON.ObjectID().toHexString()
+        default: () => new Realm.BSON.ObjectID()
       },
       clientName: 'string',
       certificateNumber: 'string',

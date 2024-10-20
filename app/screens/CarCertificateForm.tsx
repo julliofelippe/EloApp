@@ -27,8 +27,6 @@ import InputMasked from '../components/InputMasked';
 import TimeInput from '../components/TimeInput';
 import Button from '../components/Button';
 import SelectModal from '../components/SelectModal';
-import ModalText from '../components/TextModal';
-import { ModalImageDescription } from '../data/ModalImageDescription';
 import { useLoading } from '../context/LoadingContext';
 
 type Image = {
@@ -281,7 +279,7 @@ export default function CarCertificateForm({ route }) {
               item[0][key] = getValues()[key];
             });
           });
-
+          console.log('id:', dataCar._id);
           handleBack();
           Alert.alert('Sucesso', 'Formulário atualizado com sucesso!');
         }
@@ -289,13 +287,16 @@ export default function CarCertificateForm({ route }) {
         setIsLoading(true);
         realm.write(() => {
           return realm.create(CarFormSchema, {
+            _id: new Realm.BSON.ObjectID().toHexString(),
             ...values
           });
         });
+
         handleBack();
         Alert.alert('Sucesso', 'Formulário cadastrado com sucesso!');
       }
     } catch (error) {
+      console.log('id:', dataCar._id);
       Alert.alert(
         'Erro',
         'Algo inesperado aconteceu. Entre em contato com o administrador!'
