@@ -274,6 +274,9 @@ export default function CarCertificateForm({ route }) {
           .filtered('_id == $0', objectId.toString());
         if (item) {
           setIsLoading(true);
+          if (!item[0]._id) {
+            item[0]._id = new Realm.BSON.ObjectID().toHexString();
+          }
           realm.write(() => {
             Object.keys(dataCar).forEach((key) => {
               item[0][key] = getValues()[key];
@@ -282,6 +285,11 @@ export default function CarCertificateForm({ route }) {
           console.log('id:', dataCar._id);
           handleBack();
           Alert.alert('Sucesso', 'Formulário atualizado com sucesso!');
+        } else {
+          Alert.alert(
+            'Erro',
+            'Formulário não possui ID, por favor re-crie e tente novamente!'
+          );
         }
       } else {
         setIsLoading(true);

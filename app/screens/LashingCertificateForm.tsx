@@ -6,29 +6,29 @@ import {
   Box,
   HStack,
   Image,
-  Divider
-} from 'native-base';
-import React from 'react';
-import * as FileSystem from 'expo-file-system';
-import * as ImagePicker from 'expo-image-picker';
-import { useForm, Controller, useFieldArray } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
-import { Alert, TouchableNativeFeedback } from 'react-native';
-import { useRealm } from '@realm/react';
-import { useEffect } from 'react';
-import { ObjectId } from 'bson';
-import { Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
+  Divider,
+} from "native-base";
+import React from "react";
+import * as FileSystem from "expo-file-system";
+import * as ImagePicker from "expo-image-picker";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useNavigation, useScrollToTop } from "@react-navigation/native";
+import { Alert, TouchableNativeFeedback } from "react-native";
+import { useRealm } from "@realm/react";
+import { useEffect } from "react";
+import { ObjectId } from "bson";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 
-import { ModalImageDescription } from '../data/ModalImageDescription';
-import { LashingFormSchema } from '../models/lashingFormSchema';
-import Input from '../components/Input';
-import Button from '../components/Button';
-import ModalText from '../components/TextModal';
-import LoadingScreen from '../components/LoadingScreen';
-import InputMasked from '../components/InputMasked';
-import { useLoading } from '../context/LoadingContext';
+import { ModalImageDescription } from "../data/ModalImageDescription";
+import { LashingFormSchema } from "../models/lashingFormSchema";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import ModalText from "../components/TextModal";
+import LoadingScreen from "../components/LoadingScreen";
+import InputMasked from "../components/InputMasked";
+import { useLoading } from "../context/LoadingContext";
 
 type Image = {
   imageUrl: any;
@@ -77,43 +77,43 @@ type LashingCertificateFormProps = {
 };
 
 const LashingCertificateFormSchema = yup.object({
-  clientName: yup.string().required('Informe o nome do cliente'),
-  certificateNumber: yup.string().required('Informe o número do certificado'),
-  date: yup.string().required('Informe a data do certificado'),
-  containersNumber: yup.string().required('Informe o número do container'),
-  reservationNumber: yup.string().required('Informe o número da reserva'),
-  loadingPort: yup.string().required('Informe o porto de carregamento'),
-  destinationPort: yup.string().required('Informe o porto de destino'),
-  cargoNumber: yup.string().required('Informe o número do carregamento'),
+  clientName: yup.string().required("Informe o nome do cliente"),
+  certificateNumber: yup.string().required("Informe o número do certificado"),
+  date: yup.string().required("Informe a data do certificado"),
+  containersNumber: yup.string().required("Informe o número do container"),
+  reservationNumber: yup.string().required("Informe o número da reserva"),
+  loadingPort: yup.string().required("Informe o porto de carregamento"),
+  destinationPort: yup.string().required("Informe o porto de destino"),
+  cargoNumber: yup.string().required("Informe o número do carregamento"),
   cargoDescription: yup
     .string()
-    .required('Informe a descrição do carregamento'),
+    .required("Informe a descrição do carregamento"),
   cargoDimensions: yup
     .string()
-    .required('Informe as dimensões do carregamento'),
-  cargoWeight: yup.string().required('Informe o peso do carregamento'),
-  materialNumber: yup.string().required('Informe o número do material'),
-  materialDescription: yup.string().required('Informe a descrição do material'),
-  materialQuantity: yup.string().required('Informe a quantidade do material'),
+    .required("Informe as dimensões do carregamento"),
+  cargoWeight: yup.string().required("Informe o peso do carregamento"),
+  materialNumber: yup.string().required("Informe o número do material"),
+  materialDescription: yup.string().required("Informe a descrição do material"),
+  materialQuantity: yup.string().required("Informe a quantidade do material"),
   materialSWL: yup
     .string()
-    .required('Informe a Carga de trabalho segura do material'),
-  cintasQuantity: yup.string().required('Informe a quantidade de cintas/nine'),
+    .required("Informe a Carga de trabalho segura do material"),
+  cintasQuantity: yup.string().required("Informe a quantidade de cintas/nine"),
   companyName: yup
     .string()
-    .required('Informe o nome da empresa que forneceu o material'),
+    .required("Informe o nome da empresa que forneceu o material"),
   cargoLateralExcess: yup
     .string()
-    .required('Informe o tamanho do excesso lateral da carga'),
+    .required("Informe o tamanho do excesso lateral da carga"),
   cargoHeightExcess: yup
     .string()
-    .required('Informe o tamano do excesso de altura da carga'),
-  cargoDate: yup.string().required('Informe a data do carregamento'),
+    .required("Informe o tamano do excesso de altura da carga"),
+  cargoDate: yup.string().required("Informe a data do carregamento"),
   image: yup.array().of(
     yup.object().shape({
-      imageUrl: yup.string().required('Informe a URL da imagem'),
-      imageTitle: yup.string().required('Informe o título da imagem'),
-      imageDescription: yup.string()
+      imageUrl: yup.string().required("Informe a URL da imagem"),
+      imageTitle: yup.string().required("Informe o título da imagem"),
+      imageDescription: yup.string(),
     })
   ),
   newCargo: yup.array().of(
@@ -121,7 +121,7 @@ const LashingCertificateFormSchema = yup.object({
       newMaterialNumber: yup.string(),
       newMaterialDescription: yup.string(),
       newMaterialQuantity: yup.string(),
-      newMaterialSWL: yup.string()
+      newMaterialSWL: yup.string(),
     })
   ),
   newMaterial: yup.array().of(
@@ -129,9 +129,9 @@ const LashingCertificateFormSchema = yup.object({
       newMaterialNumber: yup.string(),
       newMaterialDescription: yup.string(),
       newMaterialQuantity: yup.string(),
-      newMaterialSWL: yup.string()
+      newMaterialSWL: yup.string(),
     })
-  )
+  ),
 });
 
 export default function LashingCertificateForm({ route }) {
@@ -143,9 +143,9 @@ export default function LashingCertificateForm({ route }) {
     setValue,
     watch,
     reset,
-    resetField
+    resetField,
   } = useForm<LashingCertificateFormProps>({
-    resolver: yupResolver(LashingCertificateFormSchema)
+    resolver: yupResolver(LashingCertificateFormSchema),
   });
 
   const { data: dataLashing, mode: modeLashing } = route.params;
@@ -153,63 +153,63 @@ export default function LashingCertificateForm({ route }) {
   const {
     fields: imageFields,
     append: imageAppend,
-    remove: imageRemove
+    remove: imageRemove,
   } = useFieldArray({
     control,
-    name: 'image'
+    name: "image",
   });
 
   const {
     fields: cargoFields,
     append: cargoAppend,
-    remove: cargoRemove
+    remove: cargoRemove,
   } = useFieldArray({
     control,
-    name: 'newCargo'
+    name: "newCargo",
   });
 
   const {
     fields: materialFields,
     append: materialAppend,
-    remove: materialRemove
+    remove: materialRemove,
   } = useFieldArray({
     control,
-    name: 'newMaterial'
+    name: "newMaterial",
   });
 
   useEffect(() => {
-    if (dataLashing && (modeLashing === 'edit' || modeLashing === 'view')) {
+    if (dataLashing && (modeLashing === "edit" || modeLashing === "view")) {
       Object.keys(dataLashing).forEach((key) => {
         setValue(key, dataLashing[key]);
-        if (key === 'image') {
+        if (key === "image") {
           const images = dataLashing[key];
           images.map((image) => {
             imageAppend({
               imageTitle: image.imageTitle,
               imageDescription: image.imageDescription,
-              imageUrl: image.imageUrl
+              imageUrl: image.imageUrl,
             });
           });
         }
-        if (key === 'newCargo') {
+        if (key === "newCargo") {
           const newCargos = dataLashing[key];
           newCargos.map((newCargo) => {
             cargoAppend({
               newCargoNumber: newCargo.newCargoNumber,
               newCargoDescription: newCargo.newCargoDescription,
               newCargoDimensions: newCargo.newCargoDimensions,
-              newCargoWeight: newCargo.newCargoWeight
+              newCargoWeight: newCargo.newCargoWeight,
             });
           });
         }
-        if (key === 'newMaterial') {
+        if (key === "newMaterial") {
           const newMaterials = dataLashing[key];
           newMaterials.map((newMaterial) => {
             materialAppend({
               newMaterialNumber: newMaterial.newMaterialNumber,
               newMaterialDescription: newMaterial.newMaterialDescription,
               newMaterialQuantity: newMaterial.newMaterialQuantity,
-              newMaterialSWL: newMaterial.newMaterialSWL
+              newMaterialSWL: newMaterial.newMaterialSWL,
             });
           });
         }
@@ -217,10 +217,10 @@ export default function LashingCertificateForm({ route }) {
     } else {
       const formData = watch();
       Object.keys(formData).forEach((key) => {
-        if (key === 'image' || key === 'newCargo' || key === 'newMaterial') {
+        if (key === "image" || key === "newCargo" || key === "newMaterial") {
           setValue(key, []);
         } else {
-          setValue(key, '');
+          setValue(key, "");
         }
       });
     }
@@ -228,7 +228,7 @@ export default function LashingCertificateForm({ route }) {
 
   const { isLoading, setIsLoading } = useLoading();
 
-  const isViewing = modeLashing === 'view';
+  const isViewing = modeLashing === "view";
 
   const ref = React.useRef(null);
   useScrollToTop(ref);
@@ -240,7 +240,7 @@ export default function LashingCertificateForm({ route }) {
   const values = getValues();
 
   function handleBack() {
-    navigation.navigate('newLashingCertificate');
+    navigation.navigate("newLashingCertificate");
   }
 
   function getImageByIndex(index: number) {
@@ -249,13 +249,16 @@ export default function LashingCertificateForm({ route }) {
 
   async function handleNewFormRegister() {
     try {
-      if (modeLashing === 'edit') {
+      if (modeLashing === "edit") {
         const objectId = new ObjectId(dataLashing._id);
         let item = realm
           .objects(LashingFormSchema)
-          .filtered('_id == $0', objectId.toString());
+          .filtered("_id == $0", objectId.toString());
         if (item) {
           setIsLoading(true);
+          if (!item[0]._id) {
+            item[0]._id = new Realm.BSON.ObjectID().toHexString();
+          }
           realm.write(() => {
             Object.keys(dataLashing).forEach((key) => {
               item[0][key] = getValues()[key];
@@ -263,23 +266,28 @@ export default function LashingCertificateForm({ route }) {
           });
 
           handleBack();
-          Alert.alert('Sucesso', 'Formulário atualizado com sucesso!');
+          Alert.alert("Sucesso", "Formulário atualizado com sucesso!");
+        } else {
+          Alert.alert(
+            "Erro",
+            "Formulário não possui ID, por favor re-crie e tente novamente!"
+          );
         }
       } else {
         setIsLoading(true);
         realm.write(() => {
           return realm.create(LashingFormSchema, {
             _id: new Realm.BSON.ObjectID().toHexString(),
-            ...values
+            ...values,
           });
         });
         handleBack();
-        Alert.alert('Sucesso', 'Formulário cadastrado com sucesso!');
+        Alert.alert("Sucesso", "Formulário cadastrado com sucesso!");
       }
     } catch (error) {
       Alert.alert(
-        'Erro',
-        'Algo inesperado aconteceu. Entre em contato com o administrador!'
+        "Erro",
+        "Algo inesperado aconteceu. Entre em contato com o administrador!"
       );
       console.error(error);
     } finally {
@@ -289,10 +297,10 @@ export default function LashingCertificateForm({ route }) {
 
   const addNewCargoDetails = async () => {
     cargoAppend({
-      newCargoNumber: '',
-      newCargoDescription: '',
-      newCargoDimensions: '',
-      newCargoWeight: ''
+      newCargoNumber: "",
+      newCargoDescription: "",
+      newCargoDimensions: "",
+      newCargoWeight: "",
     });
   };
 
@@ -300,7 +308,7 @@ export default function LashingCertificateForm({ route }) {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (permissionResult.granted === false) {
-      alert('Você precisa conceder permissão para acessar suas fotos!');
+      alert("Você precisa conceder permissão para acessar suas fotos!");
       return;
     }
     const pickerResult = await ImagePicker.launchImageLibraryAsync();
@@ -308,19 +316,19 @@ export default function LashingCertificateForm({ route }) {
       return;
     }
     const base64 = await FileSystem.readAsStringAsync(pickerResult.uri, {
-      encoding: 'base64'
+      encoding: "base64",
     });
     imageAppend({
-      imageTitle: '',
-      imageDescription: '',
-      imageUrl: base64
+      imageTitle: "",
+      imageDescription: "",
+      imageUrl: base64,
     });
   };
 
   const addNewCameraImage = async () => {
     const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
     if (permissionResult.granted === false) {
-      alert('Você precisa conceder permissão para acessar suas fotos!');
+      alert("Você precisa conceder permissão para acessar suas fotos!");
       return;
     }
     const pickerResult = await ImagePicker.launchCameraAsync();
@@ -328,12 +336,12 @@ export default function LashingCertificateForm({ route }) {
       return;
     }
     const base64 = await FileSystem.readAsStringAsync(pickerResult.uri, {
-      encoding: 'base64'
+      encoding: "base64",
     });
     imageAppend({
-      imageTitle: '',
-      imageDescription: '',
-      imageUrl: base64
+      imageTitle: "",
+      imageDescription: "",
+      imageUrl: base64,
     });
   };
 
@@ -906,7 +914,7 @@ export default function LashingCertificateForm({ route }) {
                   </Box> */}
                   <Image
                     source={{
-                      uri: `data:image/jpeg;base64,${getImageByIndex(index)}`
+                      uri: `data:image/jpeg;base64,${getImageByIndex(index)}`,
                     }}
                     alt="Imagem"
                     resizeMode="cover"
@@ -915,7 +923,7 @@ export default function LashingCertificateForm({ route }) {
                     style={{
                       width: 350,
                       height: 40,
-                      borderRadius: 12
+                      borderRadius: 12,
                     }}
                   />
                 </Box>
@@ -1022,9 +1030,9 @@ export default function LashingCertificateForm({ route }) {
         ) : (
           <Button
             text={
-              modeLashing === 'edit'
-                ? 'Atualizar Formulário'
-                : 'Enviar Formulário'
+              modeLashing === "edit"
+                ? "Atualizar Formulário"
+                : "Enviar Formulário"
             }
             width="full"
             mb={8}
